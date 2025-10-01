@@ -1,133 +1,144 @@
-// LandingPage.jsx
 import React, { useState } from "react";
 import axios from "axios";
+import { Search, Mic } from "lucide-react";
+import { motion } from "framer-motion";
 
-const LandingPage = () => {
+// Ready-made Button
+const Button = ({ children, onClick, className = "", disabled }) => (
+  <button
+    onClick={onClick}
+    disabled={disabled}
+    className={`px-4 py-2 rounded-full bg-blue-600 text-white flex items-center gap-2 hover:bg-blue-700 transition ${className} ${
+      disabled ? "opacity-50 cursor-not-allowed" : ""
+    }`}
+  >
+    {children}
+  </button>
+);
+
+// Ready-made Card
+const Card = ({ children, className = "" }) => (
+  <div className={`bg-white shadow-md rounded-md p-4 ${className}`}>{children}</div>
+);
+
+const CardContent = ({ children }) => <div className="space-y-2">{children}</div>;
+
+export default function JustiFindLanding() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [expandedIds, setExpandedIds] = useState([]);
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!query) return;
-
+  const handleSearch = async () => {
+    if (!query.trim()) return;
     setLoading(true);
+    setResults([]);
 
     try {
-      // Replace with real API later
-      const pythonRes = await axios.post("http://localhost:5000/api/search", { query });
-      const pythonResults = pythonRes.data.results;
-
-      const groqResults = await Promise.all(
-        pythonResults.map(async (item) => {
-          const groqRes = await axios.post("http://localhost:5000/api/groq", { lawId: item.id });
-          return { ...item, description: groqRes.data.description };
-        })
-      );
-
-      setResults(groqResults);
+      const response = await axios.post("http://127.0.0.1:5000/search", { query });
+      const data = response.data.results || [];
+      setResults(data);
     } catch (error) {
-      console.error("Error fetching results:", error);
-      setResults([]);
-    } finally {
-      setLoading(false);
+      console.error(error);
+      setResults([{ title: "Error", description: "❌ Error fetching result. Please try again." }]);
     }
-  };
 
-  const toggleExpand = (id) => {
-    setExpandedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-50 flex flex-col items-center p-6">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Header */}
+      <header className="bg-white shadow-sm p-4 flex justify-between items-center">
+        <h1 className="text-2xl font-bold text-blue-800">JustiFind</h1>
+        <nav className="space-x-4">
+          {["Home", "Laws by Category", "NGOs & Legal Aid", "News", "Myths vs Facts"].map((item) => (
+            <a key={item} href="#" className="text-gray-700 hover:text-blue-600">{item}</a>
+          ))}
+        </nav>
+      </header>
+
       {/* Hero Section */}
-      <div className="text-center mb-12 relative max-w-3xl">
-        <h1 className="text-5xl font-bold text-blue-800 mb-4">
-          ⚖ Law Search Portal
-        </h1>
-        <p className="text-gray-600 text-lg">
-          Search and explore laws with detailed descriptions and categories
-        </p>
-      </div>
-
-      {/* Search Box */}
-      <form
-        onSubmit={handleSearch}
-        className="w-full max-w-2xl flex shadow-lg rounded-full overflow-hidden mb-8"
-      >
-        <input
-          type="text"
-          placeholder="Enter law name or keyword..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="flex-grow p-4 focus:outline-none text-gray-700"
-        />
-        <button
-          type="submit"
-          className="bg-blue-700 text-white px-6 font-semibold hover:bg-blue-800 transition-colors"
+      <main className="flex-grow flex flex-col items-center justify-center px-4 py-10 text-center">
+        <motion.h2
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-3xl md:text-4xl font-bold mb-6"
         >
-          Search
-        </button>
-      </form>
+          Ask your legal question…
+        </motion.h2>
 
-      {/* Loading Spinner */}
-      {loading && (
-        <div className="mt-6">
-          <div className="loader border-4 border-blue-300 border-t-blue-700 rounded-full w-12 h-12 animate-spin mx-auto"></div>
+        {/* Search Bar */}
+        <div className="flex items-center w-full max-w-xl bg-white shadow-md rounded-full px-4 py-2 border border-gray-200">
+          <input
+            type="text"
+            placeholder="Ask your legal question..."
+            className="flex-grow focus:outline-none px-2 text-gray-700"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <Mic className="text-gray-500 mx-2" />
+          <Button onClick={handleSearch} disabled={loading}>
+            <Search size={18} /> {loading ? "Searching..." : "Search"}
+          </Button>
         </div>
-      )}
 
-      {/* Results */}
-      <div className="mt-10 w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
-        {results.map((res) => {
-          const isExpanded = expandedIds.includes(res.id);
-          return (
-            <div
-              key={res.id}
-              className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl border border-gray-200 transition-shadow cursor-pointer"
-              onClick={() => toggleExpand(res.id)}
-            >
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="font-semibold text-xl text-blue-800">{res.title || res.name}</h2>
-                {res.category && (
-                  <span className="inline-block bg-blue-100 text-blue-700 text-xs font-medium px-2 py-1 rounded-full">
-                    {res.category}
-                  </span>
-                )}
-              </div>
-              <p className={`text-gray-600 overflow-hidden transition-max-h duration-300 ${isExpanded ? 'max-h-96' : 'max-h-16'}`}>
-                {res.description}
-              </p>
-              <span className="text-blue-700 font-medium mt-2 inline-block">
-                {isExpanded ? 'Show less ▲' : 'Read more ▼'}
+        {/* Results */}
+        {results.length > 0 && (
+          <section className="mt-6 w-full max-w-2xl">
+            {results.map((res, idx) => (
+              <Card key={idx} className="mb-4 text-left">
+                <CardContent>
+                  {res.section && <h3 className="text-lg font-semibold">Section {res.section} - {res.title}</h3>}
+                  {!res.section && <h3 className="text-lg font-semibold">{res.title}</h3>}
+                  <p className="text-gray-700 whitespace-pre-line">{res.description}</p>
+                  {res.score && <p className="text-sm text-gray-500">Score: {res.score.toFixed(2)}</p>}
+                </CardContent>
+              </Card>
+            ))}
+          </section>
+        )}
+
+        {/* Key Features */}
+        <section className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
+          {[{ title: "🤖 AI Chatbot Support", desc: "Get instant legal answers in simple language." },
+            { title: "📖 Know Your Rights", desc: "Read categorized laws & real-world examples." },
+            { title: "📰 Legal News Feed", desc: "Stay updated on important legal changes." },
+            { title: "✅ Myths vs Facts", desc: "Clear common legal misconceptions." }
+          ].map((feature) => (
+            <Card key={feature.title}>
+              <CardContent>
+                <h3 className="font-semibold text-lg">{feature.title}</h3>
+                <p className="text-gray-600">{feature.desc}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </section>
+
+        {/* Popular Categories */}
+        <section className="mt-12 max-w-2xl w-full text-center">
+          <h3 className="font-semibold text-lg mb-4">Popular Categories</h3>
+          <div className="flex flex-wrap gap-3 justify-center">
+            {["Labour Laws","Women Rights","Cyber Crime","Property Disputes","RTI","Consumer Rights"].map((cat) => (
+              <span key={cat} className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-blue-200">
+                {cat}
               </span>
-            </div>
-          );
-        })}
-      </div>
+            ))}
+          </div>
+        </section>
 
-      {/* No results */}
-      {!loading && results.length === 0 && (
-        <p className="mt-6 text-gray-500">No results yet. Try searching above.</p>
-      )}
+        {/* Call to Action */}
+        <section className="mt-12 text-center">
+          <p className="mb-3 text-gray-700">
+            Need more help? Connect with verified NGOs & lawyers near you
+          </p>
+          <Button className="mx-auto block">Find Help</Button>
+        </section>
+      </main>
 
-      {/* Loader CSS */}
-      <style>
-        {`
-          .loader {
-            border-top-color: #1e40af;
-            animation: spin 1s linear infinite;
-          }
-          @keyframes spin {
-            to { transform: rotate(360deg); }
-          }
-        `}
-      </style>
+      {/* Footer */}
+      <footer className="bg-gray-100 py-4 text-center text-gray-600">
+        © {new Date().getFullYear()} JustiFind – Your Legal Rights, Simplified
+      </footer>
     </div>
   );
-};
-
-export default LandingPage;
+}
