@@ -28,23 +28,6 @@ export default function JustiFindLanding() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // const handleSearch = async () => {
-  //   if (!query.trim()) return;
-  //   setLoading(true);
-  //   setResults([]);
-
-  //   try {
-  //     const response = await axios.post("http://127.0.0.1:5000/search", { query });
-  //     const data = response.data.results || [];
-  //     setResults(data);
-  //   } catch (error) {
-  //     console.error(error);
-  //     setResults([{ title: "Error", description: "❌ Error fetching result. Please try again." }]);
-  //   }
-
-  //   setLoading(false);
-  // };
-
   const handleSearch = async () => {
     if (!query.trim()) return;
     setLoading(true);
@@ -55,22 +38,30 @@ export default function JustiFindLanding() {
       const data = response.data;
 
       // Transform to match your Card rendering
-      setResults([{
-  section: data.law.section,
-  title: data.law.title,
-  description: data.law.description,   // from dataset
-  ai_response: data.ai_response        // AI explanation
-}]);
-
-
+      setResults([
+        {
+          section: data.law.section,
+          title: data.law.title,
+          description: data.law.description, // dataset description
+          ai_response: data.ai_response, // AI explanation
+        },
+      ]);
     } catch (error) {
       console.error(error);
-      setResults([{ title: "Error", description: "❌ Error fetching result. Please try again." }]);
+      setResults([
+        { title: "Error", description: "❌ Error fetching result. Please try again." },
+      ]);
     }
 
     setLoading(false);
-};
+  };
 
+  // Utility to strip **stars** and convert to <strong>
+  const formatAIResponse = (text) => {
+    if (!text) return "";
+    // Replace markdown-style **bold** with <strong>
+    return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -78,9 +69,17 @@ export default function JustiFindLanding() {
       <header className="bg-white shadow-sm p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-blue-800">JustiFind</h1>
         <nav className="space-x-4">
-          {["Home", "Laws by Category", "NGOs & Legal Aid", "News", "Myths vs Facts"].map((item) => (
-            <a key={item} href="#" className="text-gray-700 hover:text-blue-600">{item}</a>
-          ))}
+          {["Home", "Laws by Category", "NGOs & Legal Aid", "News", "Myths vs Facts"].map(
+            (item) => (
+              <a
+                key={item}
+                href="#"
+                className="text-gray-700 hover:text-blue-600"
+              >
+                {item}
+              </a>
+            )
+          )}
         </nav>
       </header>
 
@@ -115,25 +114,63 @@ export default function JustiFindLanding() {
             {results.map((res, idx) => (
               <Card key={idx} className="mb-4 text-left">
                 <CardContent>
-                 
-                  {!res.section && <h3 className="text-lg font-semibold">{res.title}</h3>}
-                  <p className="text-gray-700 whitespace-pre-line">{res.description}</p>
-                  <p>{res.ai_response}</p>
-                  {res.score && <p className="text-sm text-gray-500">Score: {res.score.toFixed(2)}</p>}
+                  {/* Section / Title */}
+                  {res.section && (
+                    <h3 className="text-xl font-bold text-blue-700 mb-2">
+                      {/* {res.section} – {res.title} */}
+                    </h3>
+                  )}
+                  {!res.section && (
+                    <h3 className="text-lg font-semibold"> 
+                    {/* {res.title} */}
+                    </h3>
+                  )}
+
+                  {/* Only show law description, NOT user query */}
+                  {res.description && (
+                    <p className="text-gray-700 mb-4 whitespace-pre-line">
+                      {/* {res.description} */}
+                    </p>
+                  )}
+
+                  {/* AI Response Box */}
+                  {res.ai_response && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      {/* border border-blue-200 */}
+                      <p
+                        className="text-gray-800 leading-relaxed whitespace-pre-line "
+                        dangerouslySetInnerHTML={{ __html: formatAIResponse(res.ai_response) }}
+                      />
+                    </div>
+                  )}
+
+                  {res.score && (
+                    <p className="text-sm text-gray-500 mt-2">
+                      Score: {res.score.toFixed(2)}
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             ))}
           </section>
-
-
         )}
 
         {/* Key Features */}
         <section className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
-          {[{ title: "🤖 AI Chatbot Support", desc: "Get instant legal answers in simple language." },
-            { title: "📖 Know Your Rights", desc: "Read categorized laws & real-world examples." },
+          {[
+            {
+              title: "🤖 AI Chatbot Support",
+              desc: "Get instant legal answers in simple language.",
+            },
+            {
+              title: "📖 Know Your Rights",
+              desc: "Read categorized laws & real-world examples.",
+            },
             { title: "📰 Legal News Feed", desc: "Stay updated on important legal changes." },
-            { title: "✅ Myths vs Facts", desc: "Clear common legal misconceptions." }
+            {
+              title: "✅ Myths vs Facts",
+              desc: "Clear common legal misconceptions.",
+            },
           ].map((feature) => (
             <Card key={feature.title}>
               <CardContent>
@@ -148,8 +185,18 @@ export default function JustiFindLanding() {
         <section className="mt-12 max-w-2xl w-full text-center">
           <h3 className="font-semibold text-lg mb-4">Popular Categories</h3>
           <div className="flex flex-wrap gap-3 justify-center">
-            {["Labour Laws","Women Rights","Cyber Crime","Property Disputes","RTI","Consumer Rights"].map((cat) => (
-              <span key={cat} className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-blue-200">
+            {[
+              "Labour Laws",
+              "Women Rights",
+              "Cyber Crime",
+              "Property Disputes",
+              "RTI",
+              "Consumer Rights",
+            ].map((cat) => (
+              <span
+                key={cat}
+                className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-blue-200"
+              >
                 {cat}
               </span>
             ))}
