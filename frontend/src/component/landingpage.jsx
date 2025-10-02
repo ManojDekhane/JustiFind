@@ -28,6 +28,23 @@ export default function JustiFindLanding() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // const handleSearch = async () => {
+  //   if (!query.trim()) return;
+  //   setLoading(true);
+  //   setResults([]);
+
+  //   try {
+  //     const response = await axios.post("http://127.0.0.1:5000/search", { query });
+  //     const data = response.data.results || [];
+  //     setResults(data);
+  //   } catch (error) {
+  //     console.error(error);
+  //     setResults([{ title: "Error", description: "❌ Error fetching result. Please try again." }]);
+  //   }
+
+  //   setLoading(false);
+  // };
+
   const handleSearch = async () => {
     if (!query.trim()) return;
     setLoading(true);
@@ -35,15 +52,25 @@ export default function JustiFindLanding() {
 
     try {
       const response = await axios.post("http://127.0.0.1:5000/search", { query });
-      const data = response.data.results || [];
-      setResults(data);
+      const data = response.data;
+
+      // Transform to match your Card rendering
+      setResults([{
+  section: data.law.section,
+  title: data.law.title,
+  description: data.law.description,   // from dataset
+  ai_response: data.ai_response        // AI explanation
+}]);
+
+
     } catch (error) {
       console.error(error);
       setResults([{ title: "Error", description: "❌ Error fetching result. Please try again." }]);
     }
 
     setLoading(false);
-  };
+};
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -88,14 +115,17 @@ export default function JustiFindLanding() {
             {results.map((res, idx) => (
               <Card key={idx} className="mb-4 text-left">
                 <CardContent>
-                  {res.section && <h3 className="text-lg font-semibold">Section {res.section} - {res.title}</h3>}
+                 
                   {!res.section && <h3 className="text-lg font-semibold">{res.title}</h3>}
                   <p className="text-gray-700 whitespace-pre-line">{res.description}</p>
+                  <p>{res.ai_response}</p>
                   {res.score && <p className="text-sm text-gray-500">Score: {res.score.toFixed(2)}</p>}
                 </CardContent>
               </Card>
             ))}
           </section>
+
+
         )}
 
         {/* Key Features */}
