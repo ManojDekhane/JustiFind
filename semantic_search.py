@@ -31,7 +31,7 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 # Generate embeddings for all laws
 law_embeddings = model.encode(df["text_for_embedding"].tolist(), convert_to_tensor=True)
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 # 3. Define semantic search function
 def semantic_search(query, top_k=1):
@@ -72,7 +72,7 @@ def search():
     return jsonify({"results": results})
 
 # 4. Example usage
-if _name_ == "_main_":
+if __name__ == "_main_":
     # query = "Someone killed a person intentionally"
     # results = semantic_search(query, top_k=1)
     
