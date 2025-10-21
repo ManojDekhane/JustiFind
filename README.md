@@ -41,9 +41,9 @@ python semantic_search.py
 Backend will start at http://localhost:5000
 
 🔸 3. Run the Frontend (React)
-cd frontend
-npm install
-npm run dev
+1. cd frontend
+2. npm install
+3. npm run dev
 
 📘 Example Use Case
 
