@@ -8,9 +8,8 @@ const Button = ({ children, onClick, className = "", disabled }) => (
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`px-4 py-2 rounded-full bg-blue-600 text-white flex items-center gap-2 hover:bg-blue-700 transition ${className} ${
-      disabled ? "opacity-50 cursor-not-allowed" : ""
-    }`}
+    className={`px-4 py-2 rounded-full bg-blue-600 text-white flex items-center gap-2 hover:bg-blue-700 transition ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""
+      }`}
   >
     {children}
   </button>
@@ -64,6 +63,88 @@ export default function JustiFindLanding() {
       setIsListening(false);
     }
   }
+
+
+
+// export default function JustiFindLanding() {
+//   const [query, setQuery] = useState("");
+//   const [results, setResults] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [isListening, setIsListening] = useState(false);
+//   const [statusMessage, setStatusMessage] = useState("");  // ✅ NEW
+
+//   const recognitionRef = useRef(null);
+//   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+//   if (SpeechRecognition && !recognitionRef.current) {
+//     const recognition = new SpeechRecognition();
+//     recognition.continuous = false;
+//     recognition.interimResults = true;
+//     recognition.lang = "en-IN";
+
+//     // ✅ Voice started
+//     recognition.onstart = () => {
+//       setStatusMessage("🎤 Voice active, listening...");
+//     };
+
+//     // ✅ Voice ended without error
+//     recognition.onend = () => {
+//       setIsListening(false);
+//       setStatusMessage((prev) => prev === "🎤 Voice active, listening..." ? "⏹ Voice stopped." : prev);
+//       handleSearch();
+//     };
+
+//     // ✅ Speech detected then silence
+//     recognition.onspeechend = () => {
+//       setStatusMessage("⌛ Processing your speech...");
+//     };
+
+//     // ✅ When speech is received
+//     recognition.onresult = (event) => {
+//       const transcript = event.results[0][0].transcript;
+//       setQuery(transcript);
+//       setStatusMessage(`✅ Heard: "${transcript}"`);
+//     };
+
+//     // ✅ Error handling
+//     recognition.onerror = (event) => {
+//       console.log("❌ Error:", event.error);
+//       if (event.error === "no-speech") {
+//         setStatusMessage("❌ No speech detected. Please speak louder or check your mic.");
+//       } else if (event.error === "audio-capture") {
+//         setStatusMessage("❌ No microphone detected. Please connect or enable it.");
+//       } else if (event.error === "not-allowed") {
+//         setStatusMessage("❌ Mic permission blocked. Allow microphone access in browser settings.");
+//       } else {
+//         setStatusMessage(`❌ Error: ${event.error}`);
+//       }
+//       setIsListening(false);
+//     };
+
+//     recognitionRef.current = recognition;
+//   }
+
+//   const handleVoiceInput = () => {
+//     if (!recognitionRef.current) {
+//       setStatusMessage("⚠ Speech Recognition not supported in this browser.");
+//       return;
+//     }
+
+//     if (!isListening) {
+//       setIsListening(true);
+//       setStatusMessage("🎤 Activating microphone...");
+//       recognitionRef.current.start();
+//     } else {
+//       recognitionRef.current.stop();
+//       setIsListening(false);
+//       setStatusMessage("⏹ Voice stopped manually.");
+//     }
+//   };
+
+
+
+
+
 
   const handleSearch = async () => {
     if (!query.trim()) return;
@@ -149,6 +230,13 @@ export default function JustiFindLanding() {
           </Button>
         </div>
 
+        {/* {statusMessage && (
+          <p className="mt-3 text-sm text-gray-600">
+            {statusMessage}
+          </p>
+        )} */}
+
+
         {/* Results */}
         {results.length > 0 && (
           <section className="mt-6 w-full max-w-2xl">
@@ -162,8 +250,8 @@ export default function JustiFindLanding() {
                     </h3>
                   )}
                   {!res.section && (
-                    <h3 className="text-lg font-semibold"> 
-                    {/* {res.title} */}
+                    <h3 className="text-lg font-semibold">
+                      {/* {res.title} */}
                     </h3>
                   )}
 
