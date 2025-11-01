@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import { Search, Mic } from "lucide-react";
 import { motion } from "framer-motion";
@@ -27,6 +27,43 @@ export default function JustiFindLanding() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+
+  const recognitionRef = useRef(null);
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (SpeechRecognition && !recognitionRef.current) {
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = "en-IN";
+    recognitionRef.current = recognition;
+  }
+
+  const handleVoiceInput = () => {
+    if (!recognitionRef.current) {
+      alert("Speed Recognition is not supported in your browser.");
+      return;
+    }
+
+    if (!isListening) {
+      setIsListening(true);
+      recognitionRef.current.start();
+
+      recognitionRef.current.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setQuery(transcript);
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+        handleSearch();
+      };
+    } else {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    }
+  }
 
   const handleSearch = async () => {
     if (!query.trim()) return;
@@ -102,7 +139,11 @@ export default function JustiFindLanding() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <Mic className="text-gray-500 mx-2" />
+
+          <button onClick={handleVoiceInput} className={`mx-2 ${isListening ? "text-red-500" : "text-gray-500"}`}>
+            <Mic className={isListening ? "animate-pulse" : ""} />
+          </button>
+
           <Button onClick={handleSearch} disabled={loading}>
             <Search size={18} /> {loading ? "Searching..." : "Search"}
           </Button>
