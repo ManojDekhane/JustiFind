@@ -3,20 +3,19 @@ import axios from "axios";
 import { Search, Mic } from "lucide-react";
 import { motion } from "framer-motion";
 
-// Ready-made Button
+//Ready-made Button
 const Button = ({ children, onClick, className = "", disabled }) => (
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`px-4 py-2 rounded-full bg-blue-600 text-white flex items-center gap-2 hover:bg-blue-700 transition ${className} ${
-      disabled ? "opacity-50 cursor-not-allowed" : ""
+    className={`px-4 py-2 rounded-full bg-blue-600 text-white flex items-center gap-2 hover:bg-blue-700 transition ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""
     }`}
   >
     {children}
   </button>
 );
 
-// Ready-made Card
+//Ready-made Card
 const Card = ({ children, className = "" }) => (
   <div className={`bg-white shadow-md rounded-md p-4 ${className}`}>{children}</div>
 );
@@ -28,6 +27,8 @@ export default function JustiFindLanding() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [lawyers, setLawyers] = useState([]);
+  const [lawyerLoading, setLawyerLoading] = useState(false);
 
   const recognitionRef = useRef(null);
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -42,7 +43,7 @@ export default function JustiFindLanding() {
 
   const handleVoiceInput = () => {
     if (!recognitionRef.current) {
-      alert("Speed Recognition is not supported in your browser.");
+      alert("Speech Recognition is not supported in your browser.");
       return;
     }
 
@@ -63,7 +64,89 @@ export default function JustiFindLanding() {
       recognitionRef.current.stop();
       setIsListening(false);
     }
-  }
+  };
+
+
+
+// export default function JustiFindLanding() {
+//   const [query, setQuery] = useState("");
+//   const [results, setResults] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [isListening, setIsListening] = useState(false);
+//   const [statusMessage, setStatusMessage] = useState("");  // ✅ NEW
+
+//   const recognitionRef = useRef(null);
+//   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+//   if (SpeechRecognition && !recognitionRef.current) {
+//     const recognition = new SpeechRecognition();
+//     recognition.continuous = false;
+//     recognition.interimResults = true;
+//     recognition.lang = "en-IN";
+
+//     // ✅ Voice started
+//     recognition.onstart = () => {
+//       setStatusMessage("🎤 Voice active, listening...");
+//     };
+
+//     // ✅ Voice ended without error
+//     recognition.onend = () => {
+//       setIsListening(false);
+//       setStatusMessage((prev) => prev === "🎤 Voice active, listening..." ? "⏹ Voice stopped." : prev);
+//       handleSearch();
+//     };
+
+//     // ✅ Speech detected then silence
+//     recognition.onspeechend = () => {
+//       setStatusMessage("⌛ Processing your speech...");
+//     };
+
+//     // ✅ When speech is received
+//     recognition.onresult = (event) => {
+//       const transcript = event.results[0][0].transcript;
+//       setQuery(transcript);
+//       setStatusMessage(`✅ Heard: "${transcript}"`);
+//     };
+
+//     // ✅ Error handling
+//     recognition.onerror = (event) => {
+//       console.log("❌ Error:", event.error);
+//       if (event.error === "no-speech") {
+//         setStatusMessage("❌ No speech detected. Please speak louder or check your mic.");
+//       } else if (event.error === "audio-capture") {
+//         setStatusMessage("❌ No microphone detected. Please connect or enable it.");
+//       } else if (event.error === "not-allowed") {
+//         setStatusMessage("❌ Mic permission blocked. Allow microphone access in browser settings.");
+//       } else {
+//         setStatusMessage(`❌ Error: ${event.error}`);
+//       }
+//       setIsListening(false);
+//     };
+
+//     recognitionRef.current = recognition;
+//   }
+
+//   const handleVoiceInput = () => {
+//     if (!recognitionRef.current) {
+//       setStatusMessage("⚠ Speech Recognition not supported in this browser.");
+//       return;
+//     }
+
+//     if (!isListening) {
+//       setIsListening(true);
+//       setStatusMessage("🎤 Activating microphone...");
+//       recognitionRef.current.start();
+//     } else {
+//       recognitionRef.current.stop();
+//       setIsListening(false);
+//       setStatusMessage("⏹ Voice stopped manually.");
+//     }
+//   };
+
+
+
+
+
 
   const handleSearch = async () => {
     if (!query.trim()) return;
@@ -73,30 +156,58 @@ export default function JustiFindLanding() {
     try {
       const response = await axios.post("http://127.0.0.1:5000/search", { query });
       const data = response.data;
-
-      // Transform to match your Card rendering
       setResults([
         {
           section: data.law.section,
           title: data.law.title,
-          description: data.law.description, // dataset description
-          ai_response: data.ai_response, // AI explanation
+          description: data.law.description,
+          ai_response: data.ai_response,
         },
       ]);
     } catch (error) {
       console.error(error);
-      setResults([
-        { title: "Error", description: "❌ Error fetching result. Please try again." },
-      ]);
+      setResults([{ title: "Error", description: "❌ Error fetching result. Please try again." }]);
     }
 
     setLoading(false);
   };
 
-  // Utility to strip **stars** and convert to <strong>
+  // ✅ UPDATED: Fetch nearby lawyers using live GPS
+  const fetchLawyers = async () => {
+    setLawyerLoading(true);
+    setLawyers([]);
+
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      setLawyerLoading(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+          const res = await axios.get(`http://127.0.0.1:5000/lawyers?lat=${lat}&lon=${lon}&limit=5`);
+          setLawyers(res.data.lawyers.slice(0, 5));
+        } catch (err) {
+          console.error(err);
+          setLawyers([]);
+        }
+
+        setLawyerLoading(false);
+      },
+      (error) => {
+        console.error(error);
+        alert("Location access denied. Please enable GPS and try again.");
+        setLawyerLoading(false);
+      }
+    );
+  };
+
   const formatAIResponse = (text) => {
     if (!text) return "";
-    // Replace markdown-style **bold** with <strong>
     return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
   };
 
@@ -106,16 +217,11 @@ export default function JustiFindLanding() {
       <header className="bg-white shadow-sm p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-blue-800">JustiFind</h1>
         <nav className="space-x-4">
-          {["Home", "Laws by Category", "NGOs & Legal Aid", "News", "Myths vs Facts"].map(
-            (item) => (
-              <a
-                key={item}
-                href="#"
-                className="text-gray-700 hover:text-blue-600"
-              >
-                {item}
-              </a>
-            )
+          {["Home", "Laws by Category", "NGOs & Legal Aid", "News", "Myths vs Facts"].map((item) => (
+            <a key={item} href="#" className="text-gray-700 hover:text-blue-600">
+              {item}
+            </a>
+          )
           )}
         </nav>
       </header>
@@ -149,12 +255,20 @@ export default function JustiFindLanding() {
           </Button>
         </div>
 
+        {/* {statusMessage && (
+          <p className="mt-3 text-sm text-gray-600">
+            {statusMessage}
+          </p>
+        )} */}
+
+
         {/* Results */}
         {results.length > 0 && (
           <section className="mt-6 w-full max-w-2xl">
             {results.map((res, idx) => (
               <Card key={idx} className="mb-4 text-left">
                 <CardContent>
+
                   {/* Section / Title */}
                   {res.section && (
                     <h3 className="text-xl font-bold text-blue-700 mb-2">
@@ -162,8 +276,8 @@ export default function JustiFindLanding() {
                     </h3>
                   )}
                   {!res.section && (
-                    <h3 className="text-lg font-semibold"> 
-                    {/* {res.title} */}
+                    <h3 className="text-lg font-semibold">
+                      {/* {res.title} */}
                     </h3>
                   )}
 
@@ -175,43 +289,56 @@ export default function JustiFindLanding() {
                   )}
 
                   {/* AI Response Box */}
+
                   {res.ai_response && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      {/* border border-blue-200 */}
                       <p
-                        className="text-gray-800 leading-relaxed whitespace-pre-line "
+                        className="text-gray-800 leading-relaxed whitespace-pre-line"
                         dangerouslySetInnerHTML={{ __html: formatAIResponse(res.ai_response) }}
                       />
                     </div>
                   )}
-
-                  {res.score && (
-                    <p className="text-sm text-gray-500 mt-2">
-                      Score: {res.score.toFixed(2)}
-                    </p>
-                  )}
                 </CardContent>
               </Card>
+              
             ))}
+            
           </section>
         )}
 
-        {/* Key Features */}
+        {/* ✅ Nearby Lawyers Section */}
+        <section className="mt-12 max-w-3xl w-full text-center">
+          <Button onClick={fetchLawyers} disabled={lawyerLoading}>
+            {lawyerLoading ? "Finding..." : "Get Help"}
+          </Button>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+            {lawyers.map((lawyer, i) => (
+              <Card key={i}>
+                <CardContent>
+                  <h4 className="font-semibold text-lg text-gray-800">{lawyer.name}</h4>
+                  <p className="text-sm text-gray-600">📍 {lawyer.location}</p>
+                  <p className="text-sm text-gray-600">📞 {lawyer.contact}</p>
+                  <p className="text-sm text-gray-600">✉️ {lawyer.email}</p>
+                  <p className="text-sm text-gray-600">⚖️ {lawyer.category}</p>
+                  <p className="text-sm text-blue-600">Distance: {lawyer.distance.toFixed(2)} km</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* Features */}
         <section className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
           {[
-            {
-              title: "🤖 AI Chatbot Support",
-              desc: "Get instant legal answers in simple language.",
-            },
-            {
-              title: "📖 Know Your Rights",
-              desc: "Read categorized laws & real-world examples.",
-            },
-            { title: "📰 Legal News Feed", desc: "Stay updated on important legal changes." },
-            {
-              title: "✅ Myths vs Facts",
-              desc: "Clear common legal misconceptions.",
-            },
+            { title: "🤖 AI Chatbot Support",
+               desc: "Get instant legal answers in simple language." },
+            { title: "📖 Know Your Rights", 
+              desc: "Read categorized laws & real-world examples." },
+            { title: "📰 Legal News Feed",
+               desc: "Stay updated on important legal changes." },
+            { title: "✅ Myths vs Facts", 
+              desc: "Clear common legal misconceptions." },
           ].map((feature) => (
             <Card key={feature.title}>
               <CardContent>
@@ -222,18 +349,15 @@ export default function JustiFindLanding() {
           ))}
         </section>
 
-        {/* Popular Categories */}
         <section className="mt-12 max-w-2xl w-full text-center">
           <h3 className="font-semibold text-lg mb-4">Popular Categories</h3>
           <div className="flex flex-wrap gap-3 justify-center">
-            {[
-              "Labour Laws",
-              "Women Rights",
-              "Cyber Crime",
-              "Property Disputes",
-              "RTI",
-              "Consumer Rights",
-            ].map((cat) => (
+            {["Labour Laws", 
+            "Women Rights",
+             "Cyber Crime",
+              "Property Disputes", 
+              "RTI", 
+              "Consumer Rights"].map((cat) => (
               <span
                 key={cat}
                 className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-blue-200"
@@ -244,16 +368,12 @@ export default function JustiFindLanding() {
           </div>
         </section>
 
-        {/* Call to Action */}
         <section className="mt-12 text-center">
-          <p className="mb-3 text-gray-700">
-            Need more help? Connect with verified NGOs & lawyers near you
-          </p>
+          <p className="mb-3 text-gray-700">Need more help? Connect with verified NGOs & lawyers near you</p>
           <Button className="mx-auto block">Find Help</Button>
         </section>
       </main>
 
-      {/* Footer */}
       <footer className="bg-gray-100 py-4 text-center text-gray-600">
         © {new Date().getFullYear()} JustiFind – Your Legal Rights, Simplified
       </footer>
