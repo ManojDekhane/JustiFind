@@ -3,11 +3,14 @@ from flask_cors import CORS
 import pandas as pd
 from sentence_transformers import SentenceTransformer, util
 from sentence_transformers.util import cos_sim
+from geopy.distance import geodesic
 import requests
 
+app = Flask(__name__)
+CORS(app)
 
 # ==========================================================
-# 1. Load your dataset
+# 1. Load Dataset
 # ==========================================================
 df = pd.read_csv(
    "C:\\Users\\Lenovo\\OneDrive\\Desktop\\CrimesAgainstPersonsLawsDataset.csv",
@@ -17,7 +20,6 @@ df = pd.read_csv(
     on_bad_lines='skip'
 )
 
-# Combine fields into one string for embeddings
 df["text_for_embedding"] = (
     "Section " + df["Section"].astype(str) + ". " +
     df["Title"].fillna("").astype(str) + ". " +
@@ -26,23 +28,17 @@ df["text_for_embedding"] = (
     df["Keywords"].fillna("").astype(str)
 )
 
-# Cleaner text (for AI explanation)
 df["text_clean"] = (
     "Section " + df["Section"].astype(str) + " - " +
     df["Title"].fillna("").astype(str) + ". " +
     df["Description"].fillna("").astype(str)
 )
 
-
 # ==========================================================
-# 2. Load a sentence transformer model
+# 2. Load Sentence Transformer
 # ==========================================================
-# Faster but slightly less accurate: "all-MiniLM-L6-v2"
-# Better semantic accuracy: "all-mpnet-base-v2"
-# model = SentenceTransformer("all-mpnet-base-v2")
 model = SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
 
-# Generate embeddings + normalize
 law_embeddings = model.encode(
     df["text_for_embedding"].tolist(),
     convert_to_tensor=True,
@@ -50,9 +46,8 @@ law_embeddings = model.encode(
 )
 law_embeddings = util.normalize_embeddings(law_embeddings)
 
-
 # ==========================================================
-# 3. Semantic search function
+# 3. Semantic Search Function
 # ==========================================================
 def semantic_search(query, top_k=3):
     query_embedding = model.encode([query], convert_to_tensor=True)
@@ -72,10 +67,6 @@ def semantic_search(query, top_k=3):
         })
     return results
 
-
-# ==========================================================
-# 4. Re-rank function (keyword overlap)
-# ==========================================================
 def re_rank_results(query, results):
     q_tokens = set(query.lower().split())
     best = results[0]
@@ -89,24 +80,15 @@ def re_rank_results(query, results):
             best = r
     return best
 
-
 # ==========================================================
-# 5. AI explanation (Groq API)
+# 4. AI Explanation (Groq API)
 # ==========================================================
 def generate_user_friendly_text(law_text, user_query):
-    GROQ_API_KEY =  "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"  # Replace with your API key
+    GROQ_API_KEY = "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"
     groq_api_url = "https://api.groq.com/openai/v1/chat/completions"
 
     prompt = f"""
-You are a legal assistant for everyday people. 
-Explain the given law in very simple, plain language so that someone without legal knowledge can easily understand it. 
-First show section and title (not description). Then:
-- What the law is about
-- What kind of behavior it covers
-- What a person should do to stay safe / prevent issues
-- Practical precautions and advice
-- Friendly, easy-to-read tone
-
+Explain the following law in simple language so a common person can understand easily:
 Law: {law_text}
 User question: {user_query}
 """
@@ -132,14 +114,9 @@ User question: {user_query}
     except requests.exceptions.RequestException as e:
         return f"AI service not reachable: {str(e)}"
 
-
 # ==========================================================
-# 6. Flask setup
+# 5. API: Search Law
 # ==========================================================
-app = Flask(__name__)
-CORS(app)
-
-
 @app.route("/search", methods=["POST"])
 def search():
     data = request.json
@@ -157,7 +134,6 @@ def search():
 
     law_row = df[df["Section"].astype(str) == best_law["section"]].iloc[0]
     clean_text = f"Section {law_row['Section']} - {law_row['Title']}. {law_row['Description']}"
-
     ai_text = generate_user_friendly_text(clean_text, query)
 
     return jsonify({
@@ -170,9 +146,37 @@ def search():
         "ai_response": ai_text
     })
 
+# ==========================================================
+# 6. API: Nearby Lawyers
+# ==========================================================
+lawyers = [
+    {"name": "Amit Sharma", "email": "amit@law.com", "contact": "9876543210", "location": "Pune", "lat": 80.5204, "lon": 73.8567, "category": "Civil"},
+    {"name": "Priya Desai", "email": "priya@law.com", "contact": "9988776655", "location": "Mumbai", "lat": 19.0760, "lon": 72.8777, "category": "Criminal"},
+    {"name": "Rohan Mehta", "email": "rohan@law.com", "contact": "8899776655", "location": "Nashik", "lat": 19.9975, "lon": 73.7898, "category": "Property"},
+    {"name": "Sneha Patil", "email": "sneha@law.com", "contact": "9001122334", "location": "Nagpur", "lat": 21.1458, "lon": 79.0882, "category": "Cyber Crime"},
+    {"name": "Karan Joshi", "email": "karan@law.com", "contact": "9500112233", "location": "Aurangabad", "lat": 19.8762, "lon": 75.3433, "category": "Labour"},
+    {"name": "Simran Kapoor", "email": "simran@law.com", "contact": "9123456789", "location": "Thane", "lat": 19.2183, "lon": 72.9781, "category": "Women Rights"},
+]
+
+@app.route("/lawyers", methods=["GET"])
+def get_lawyers():
+    try:
+        lat = float(request.args.get("lat"))
+        lon = float(request.args.get("lon"))
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid or missing latitude/longitude"}), 400
+
+    limit = int(request.args.get("limit", 5))
+    user_loc = (lat, lon)
+
+    for lawyer in lawyers:
+        lawyer["distance"] = round(geodesic(user_loc, (lawyer["lat"], lawyer["lon"])).km, 2)
+
+    nearby = sorted(lawyers, key=lambda x: x["distance"])[:limit]
+    return jsonify({"lawyers": nearby})
 
 # ==========================================================
-# 7. Run server
+# 7. Run Server                                            
 # ==========================================================
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
