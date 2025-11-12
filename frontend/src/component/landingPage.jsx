@@ -143,6 +143,7 @@ export default function JustiFindLanding() {
           )}
         </nav>
       </header>
+      
 
       {/* Hero Section */}
       <main className="flex-grow flex flex-col items-center justify-center px-4 py-10 text-center">
@@ -221,11 +222,14 @@ export default function JustiFindLanding() {
         <section className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
           {[
             { title: "🤖 AI Chatbot Support",
-               desc: "Get instant legal answers in simple language." },
+               desc: "Get instant legal answers in simple language." }
+               ,
             { title: "📖 Know Your Rights", 
-              desc: "Read categorized laws & real-world examples." },
+              desc: "Read categorized laws & real-world examples." }
+              ,
             { title: "📰 Legal News Feed",
-               desc: "Stay updated on important legal changes." },
+               desc: "Stay updated on important legal changes." }
+               ,
             { title: "✅ Myths vs Facts", 
               desc: "Clear common legal misconceptions." },
           ].map((feature) => (
