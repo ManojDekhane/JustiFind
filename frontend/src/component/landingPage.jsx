@@ -66,6 +66,88 @@ export default function JustiFindLanding() {
     }
   };
 
+
+
+// export default function JustiFindLanding() {
+//   const [query, setQuery] = useState("");
+//   const [results, setResults] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [isListening, setIsListening] = useState(false);
+//   const [statusMessage, setStatusMessage] = useState("");  // ✅ NEW
+
+//   const recognitionRef = useRef(null);
+//   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+//   if (SpeechRecognition && !recognitionRef.current) {
+//     const recognition = new SpeechRecognition();
+//     recognition.continuous = false;
+//     recognition.interimResults = true;
+//     recognition.lang = "en-IN";
+
+//     // ✅ Voice started
+//     recognition.onstart = () => {
+//       setStatusMessage("🎤 Voice active, listening...");
+//     };
+
+//     // ✅ Voice ended without error
+//     recognition.onend = () => {
+//       setIsListening(false);
+//       setStatusMessage((prev) => prev === "🎤 Voice active, listening..." ? "⏹ Voice stopped." : prev);
+//       handleSearch();
+//     };
+
+//     // ✅ Speech detected then silence
+//     recognition.onspeechend = () => {
+//       setStatusMessage("⌛ Processing your speech...");
+//     };
+
+//     // ✅ When speech is received
+//     recognition.onresult = (event) => {
+//       const transcript = event.results[0][0].transcript;
+//       setQuery(transcript);
+//       setStatusMessage(`✅ Heard: "${transcript}"`);
+//     };
+
+//     // ✅ Error handling
+//     recognition.onerror = (event) => {
+//       console.log("❌ Error:", event.error);
+//       if (event.error === "no-speech") {
+//         setStatusMessage("❌ No speech detected. Please speak louder or check your mic.");
+//       } else if (event.error === "audio-capture") {
+//         setStatusMessage("❌ No microphone detected. Please connect or enable it.");
+//       } else if (event.error === "not-allowed") {
+//         setStatusMessage("❌ Mic permission blocked. Allow microphone access in browser settings.");
+//       } else {
+//         setStatusMessage(`❌ Error: ${event.error}`);
+//       }
+//       setIsListening(false);
+//     };
+
+//     recognitionRef.current = recognition;
+//   }
+
+//   const handleVoiceInput = () => {
+//     if (!recognitionRef.current) {
+//       setStatusMessage("⚠ Speech Recognition not supported in this browser.");
+//       return;
+//     }
+
+//     if (!isListening) {
+//       setIsListening(true);
+//       setStatusMessage("🎤 Activating microphone...");
+//       recognitionRef.current.start();
+//     } else {
+//       recognitionRef.current.stop();
+//       setIsListening(false);
+//       setStatusMessage("⏹ Voice stopped manually.");
+//     }
+//   };
+
+
+
+
+
+
   const handleSearch = async () => {
     if (!query.trim()) return;
     setLoading(true);
@@ -174,12 +256,41 @@ export default function JustiFindLanding() {
           </Button>
         </div>
 
+        {/* {statusMessage && (
+          <p className="mt-3 text-sm text-gray-600">
+            {statusMessage}
+          </p>
+        )} */}
+
+
         {/* Results */}
         {results.length > 0 && (
           <section className="mt-6 w-full max-w-2xl">
             {results.map((res, idx) => (
               <Card key={idx} className="mb-4 text-left">
                 <CardContent>
+
+                  {/* Section / Title */}
+                  {res.section && (
+                    <h3 className="text-xl font-bold text-blue-700 mb-2">
+                      {/* {res.section} – {res.title} */}
+                    </h3>
+                  )}
+                  {!res.section && (
+                    <h3 className="text-lg font-semibold">
+                      {/* {res.title} */}
+                    </h3>
+                  )}
+
+                  {/* Only show law description, NOT user query */}
+                  {res.description && (
+                    <p className="text-gray-700 mb-4 whitespace-pre-line">
+                      {/* {res.description} */}
+                    </p>
+                  )}
+
+                  {/* AI Response Box */}
+
                   {res.ai_response && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <p
