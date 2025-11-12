@@ -13,10 +13,14 @@ CORS(app)
 # 1. Load Dataset
 # ==========================================================
 df = pd.read_csv(
+<<<<<<< HEAD
 
    "C:\\Users\\Lenovo\\OneDrive\\Desktop\\CrimesAgainstPersonsLawsDataset.csv",
 
     
+=======
+   "C:\\Users\\Lenovo\\OneDrive\\Desktop\\CrimesAgainstPersonsLawsDataset.csv",
+>>>>>>> 173743ba706927114a481ee9f35747c580aaf29d
     sep=',',
     quotechar='"',
     engine='python',
