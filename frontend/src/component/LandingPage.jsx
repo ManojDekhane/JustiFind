@@ -3,7 +3,7 @@ import axios from "axios";
 import { Search, Mic } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-//Ready-made Button
+
 const Button = ({ children, onClick, className = "", disabled }) => (
   <button
     onClick={onClick}
