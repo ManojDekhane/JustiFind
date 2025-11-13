@@ -1,5 +1,4 @@
-// src/data/flowerData.js
-export const flowerData = [
+export const mythFactTopicData = [
   {
     id: 1,
     name: "Police Arrest",
@@ -10,13 +9,13 @@ export const flowerData = [
     id: 2,
     name: "Cybercrime",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3vnb3pSMxbjdEr-9RsgyU224Dv37uVr78Kg&s",
-    link: "https://en.wikipedia.org/wiki/Cybercrime",
+    link: "/info/cybercrime",
   },
   {
     id: 3,
     name: "Women Arrest Law",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZbQRyEnQZkOOB8CH2Elk5PKJiXWpNxXrwqQ&s",
-    link: "/info/women-arrest",
+    link: "/info/women-arrest-law",
   },
   {
     id: 4,
