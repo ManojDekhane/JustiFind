@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-const FlowerCard = ({ name, description, image }) => {
+
+const MythFactCard = ({ name, description, image }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -24,4 +25,4 @@ const FlowerCard = ({ name, description, image }) => {
   );
 };
 
-export default FlowerCard;
+export default MythFactCard;
