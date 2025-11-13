@@ -5,16 +5,19 @@ from sentence_transformers import SentenceTransformer, util
 from sentence_transformers.util import cos_sim
 from geopy.distance import geodesic
 import requests
+import os 
+import pandas as pd
 
 app = Flask(__name__)
 CORS(app)
 
+base_dir = os.path.dirname(os.path.abspath(__file__))
+csv_path = os.path.join(base_dir, "data", "CrimesAgainstPersonsLawsDataset.csv")
+
 # ==========================================================
 # 1. Load Dataset
 # ==========================================================
-df = pd.read_csv("C:\\Users\\Lenovo\\OneDrive\\Desktop\\CrimesAgainstPersonsLawsDataset.csv",
-
-    
+df = pd.read_csv(csv_path,
     sep=',',
     quotechar='"',
     engine='python',
