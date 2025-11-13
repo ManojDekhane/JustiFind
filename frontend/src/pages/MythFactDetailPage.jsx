@@ -35,6 +35,11 @@ const mythFactDetails = () => {
         <h2 className="text-xl font-semibold text-green-600 mb-2">Fact:</h2>
         <p className="text-gray-700 text-lg leading-relaxed">{data.fact}</p>
       </div>
+
+      <div>
+        <h2 className="text-xl font-semibold text-green-600 mb-2">Description:</h2>
+        <p className="text-gray-700 text-lg leading-relaxed">{data.description}</p>
+      </div>
     </div>
   );
 };
