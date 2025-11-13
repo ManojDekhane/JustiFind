@@ -10,7 +10,7 @@ import requests
 # 1. Load your dataset
 # ==========================================================
 df = pd.read_csv(
-    "/home/manoj/Downloads/CrimesAgainstPersonsLawsDataset.csv",
+    "C:/Users/Aspir/OneDrive/Pictures/Desktop/justifind/JUSTFIND/CrimesAgainstPersonsLawsDataset.csv",
     sep=',',
     quotechar='"',
     engine='python',
