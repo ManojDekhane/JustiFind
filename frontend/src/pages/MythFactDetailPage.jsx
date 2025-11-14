@@ -5,8 +5,22 @@ import legalMythsData from "../localData/mythFactDescriptionData.js";
 const mythFactDetails = () => {
   const { topic } = useParams();
 
-  const data = legalMythsData.get(topic);
+  let data = legalMythsData.get(topic);
 
+  // // If not found directly, try matching via slug (fallback)
+  // if (!data) {
+  //   for (let [key, value] of legalMythsData.entries()) {
+  //     const slug = key
+  //       .toLowerCase()
+  //       .replace(/[^a-z0-9]+/g, "-")
+  //       .replace(/^-+|-+$/g, "");
+  //     if (slug === topic) {
+  //       data = value;
+  //       break;
+  //     }
+  //   }
+  // }
+  
   if (!data) {
     return (
       <div className="p-10">

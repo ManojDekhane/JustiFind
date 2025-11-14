@@ -5,6 +5,7 @@ import MythFactPage from "../pages/MythFactPage";
 import Navbar from "../component/Navbar";
 import  Layout from "../routes/Layout";
 import MythFactDetails from "../pages/MythFactDetailPage";
+
 const AppRoutes = () => {
   return (
     <Router>
