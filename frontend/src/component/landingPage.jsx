@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import { Search, Mic } from "lucide-react";
 import { motion } from "framer-motion";
-
+import { Link } from "react-router-dom";
 //Ready-made Button
 const Button = ({ children, onClick, className = "", disabled }) => (
   <button
@@ -212,20 +212,18 @@ export default function JustiFindLanding() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-sm p-4 flex justify-between items-center">
+    <div className="min-h-screen  flex flex-col">
+      {/* Header
+      <header className="bg-white  p-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-blue-800">JustiFind</h1>
-        <nav className="space-x-4">
-          {["Home", "Laws by Category", "NGOs & Legal Aid", "News", "Myths vs Facts"].map((item) => (
-            <a key={item} href="#" className="text-gray-700 hover:text-blue-600">
-              {item}
-            </a>
-          )
-          )}
-        </nav>
-      </header>
-      
+        <nav className="space-x-4  p-4">
+      <Link to="/" className="text-gray-700 hover:text-blue-600">Home</Link>
+      <Link to="/laws" className="text-gray-700 hover:text-blue-600">Laws by Category</Link>
+      <Link to="/ngos" className="text-gray-700 hover:text-blue-600">NGOs & Legal Aid</Link>
+      <Link to="/news" className="text-gray-700 hover:text-blue-600">News</Link>
+      <Link to="/myths" className="text-gray-700 hover:text-blue-600">Myths vs Facts</Link>
+    </nav>
+      </header> */}
 
       {/* Hero Section */}
       <main className="flex-grow flex flex-col items-center justify-center px-4 py-10 text-center">
