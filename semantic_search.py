@@ -18,7 +18,7 @@ csv_path = os.path.join(base_dir, "data", "CrimesAgainstPersonsLawsDataset.csv")
 # 1. Load Dataset
 # ==========================================================
 df = pd.read_csv(
-   "C:\\Users\\Lenovo\\OneDrive\\Desktop\\CrimesAgainstPersonsLawsDataset.csv",
+   "C:\\Users\\Shivani Katkar\\Downloads\\CrimesAgainstPersonsLawsDataset.csv",
 
     sep=',',
     quotechar='"',
@@ -121,6 +121,57 @@ User question: {user_query}
         return f"AI service not reachable: {str(e)}"
 
 # ==========================================================
+
+# ==========================================================
+# 5. Category Finding
+# ==========================================================
+LAW_CATEGORIES = [
+    "Criminal",
+    "Women Rights",
+    "Cyber Crime",
+    "Property",
+    "Labour",
+    "Civil",
+    "Other"
+]
+
+def detect_law_category(law_text):
+    GROQ_API_KEY = "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"
+    groq_api_url = "https://api.groq.com/openai/v1/chat/completions"
+
+    prompt = f"""
+Classify the following law into ONLY one category from this list:
+Criminal, Women Rights, Cyber Crime, Property, Labour, Civil, Other
+
+Return ONLY the category name.
+
+Law:
+{law_text}
+"""
+
+    payload = {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.0,
+        "max_tokens": 10
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {GROQ_API_KEY}"
+    }
+
+    try:
+        response = requests.post(groq_api_url, json=payload, headers=headers, timeout=30)
+        response.raise_for_status()
+        data = response.json()
+        category = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+        category = category.strip().replace(".", "")
+        return category
+    except requests.exceptions.RequestException:
+        return "Other"
+
+# ==========================================================
 # 5. API: Search Law
 # ==========================================================
 @app.route("/search", methods=["POST"])
@@ -141,13 +192,16 @@ def search():
     law_row = df[df["Section"].astype(str) == best_law["section"]].iloc[0]
     clean_text = f"Section {law_row['Section']} - {law_row['Title']}. {law_row['Description']}"
     ai_text = generate_user_friendly_text(clean_text, query)
+    category = detect_law_category(clean_text)
 
     return jsonify({
         "law": {
             "section": best_law["section"],
             "title": best_law["title"],
             "description": best_law["description"],
-            "score": best_law["score"]
+            "score": best_law["score"],
+             "category": category
+            
         },
         "ai_response": ai_text
     })
