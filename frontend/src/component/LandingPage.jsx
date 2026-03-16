@@ -3,13 +3,14 @@ import axios from "axios";
 import { Search, Mic } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Button = ({ children, onClick, className = "", disabled }) => (
   <button
     onClick={onClick}
     disabled={disabled}
     className={`px-4 py-2 rounded-full bg-blue-600 text-white flex items-center gap-2 hover:bg-blue-700 transition ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""
-    }`}
+      }`}
   >
     {children}
   </button>
@@ -17,6 +18,7 @@ const Button = ({ children, onClick, className = "", disabled }) => (
 
 //Ready-made Card
 const Card = ({ children, className = "" }) => (
+
   <div className={`bg-white shadow-md rounded-md p-4 ${className}`}>{children}</div>
 );
 
@@ -29,6 +31,9 @@ export default function JustiFindLanding() {
   const [isListening, setIsListening] = useState(false);
   const [lawyers, setLawyers] = useState([]);
   const [lawyerLoading, setLawyerLoading] = useState(false);
+  const [lawCategory, setLawCategory] = useState(null);
+
+  const navigate = useNavigate();
 
   const recognitionRef = useRef(null);
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -68,80 +73,80 @@ export default function JustiFindLanding() {
 
 
 
-// export default function JustiFindLanding() {
-//   const [query, setQuery] = useState("");
-//   const [results, setResults] = useState([]);
-//   const [loading, setLoading] = useState(false);
-//   const [isListening, setIsListening] = useState(false);
-//   const [statusMessage, setStatusMessage] = useState("");  // ✅ NEW
+  // export default function JustiFindLanding() {
+  //   const [query, setQuery] = useState("");
+  //   const [results, setResults] = useState([]);
+  //   const [loading, setLoading] = useState(false);
+  //   const [isListening, setIsListening] = useState(false);
+  //   const [statusMessage, setStatusMessage] = useState("");  // ✅ NEW
 
-//   const recognitionRef = useRef(null);
-//   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  //   const recognitionRef = useRef(null);
+  //   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-//   if (SpeechRecognition && !recognitionRef.current) {
-//     const recognition = new SpeechRecognition();
-//     recognition.continuous = false;
-//     recognition.interimResults = true;
-//     recognition.lang = "en-IN";
+  //   if (SpeechRecognition && !recognitionRef.current) {
+  //     const recognition = new SpeechRecognition();
+  //     recognition.continuous = false;
+  //     recognition.interimResults = true;
+  //     recognition.lang = "en-IN";
 
-//     // ✅ Voice started
-//     recognition.onstart = () => {
-//       setStatusMessage("🎤 Voice active, listening...");
-//     };
+  //     // ✅ Voice started
+  //     recognition.onstart = () => {
+  //       setStatusMessage("🎤 Voice active, listening...");
+  //     };
 
-//     // ✅ Voice ended without error
-//     recognition.onend = () => {
-//       setIsListening(false);
-//       setStatusMessage((prev) => prev === "🎤 Voice active, listening..." ? "⏹ Voice stopped." : prev);
-//       handleSearch();
-//     };
+  //     // ✅ Voice ended without error
+  //     recognition.onend = () => {
+  //       setIsListening(false);
+  //       setStatusMessage((prev) => prev === "🎤 Voice active, listening..." ? "⏹ Voice stopped." : prev);
+  //       handleSearch();
+  //     };
 
-//     // ✅ Speech detected then silence
-//     recognition.onspeechend = () => {
-//       setStatusMessage("⌛ Processing your speech...");
-//     };
+  //     // ✅ Speech detected then silence
+  //     recognition.onspeechend = () => {
+  //       setStatusMessage("⌛ Processing your speech...");
+  //     };
 
-//     // ✅ When speech is received
-//     recognition.onresult = (event) => {
-//       const transcript = event.results[0][0].transcript;
-//       setQuery(transcript);
-//       setStatusMessage(`✅ Heard: "${transcript}"`);
-//     };
+  //     // ✅ When speech is received
+  //     recognition.onresult = (event) => {
+  //       const transcript = event.results[0][0].transcript;
+  //       setQuery(transcript);
+  //       setStatusMessage(`✅ Heard: "${transcript}"`);
+  //     };
 
-//     // ✅ Error handling
-//     recognition.onerror = (event) => {
-//       console.log("❌ Error:", event.error);
-//       if (event.error === "no-speech") {
-//         setStatusMessage("❌ No speech detected. Please speak louder or check your mic.");
-//       } else if (event.error === "audio-capture") {
-//         setStatusMessage("❌ No microphone detected. Please connect or enable it.");
-//       } else if (event.error === "not-allowed") {
-//         setStatusMessage("❌ Mic permission blocked. Allow microphone access in browser settings.");
-//       } else {
-//         setStatusMessage(`❌ Error: ${event.error}`);
-//       }
-//       setIsListening(false);
-//     };
+  //     // ✅ Error handling
+  //     recognition.onerror = (event) => {
+  //       console.log("❌ Error:", event.error);
+  //       if (event.error === "no-speech") {
+  //         setStatusMessage("❌ No speech detected. Please speak louder or check your mic.");
+  //       } else if (event.error === "audio-capture") {
+  //         setStatusMessage("❌ No microphone detected. Please connect or enable it.");
+  //       } else if (event.error === "not-allowed") {
+  //         setStatusMessage("❌ Mic permission blocked. Allow microphone access in browser settings.");
+  //       } else {
+  //         setStatusMessage(`❌ Error: ${event.error}`);
+  //       }
+  //       setIsListening(false);
+  //     };
 
-//     recognitionRef.current = recognition;
-//   }
+  //     recognitionRef.current = recognition;
+  //   }
 
-//   const handleVoiceInput = () => {
-//     if (!recognitionRef.current) {
-//       setStatusMessage("⚠ Speech Recognition not supported in this browser.");
-//       return;
-//     }
+  //   const handleVoiceInput = () => {
+  //     if (!recognitionRef.current) {
+  //       setStatusMessage("⚠ Speech Recognition not supported in this browser.");
+  //       return;
+  //     }
 
-//     if (!isListening) {
-//       setIsListening(true);
-//       setStatusMessage("🎤 Activating microphone...");
-//       recognitionRef.current.start();
-//     } else {
-//       recognitionRef.current.stop();
-//       setIsListening(false);
-//       setStatusMessage("⏹ Voice stopped manually.");
-//     }
-//   };
+  //     if (!isListening) {
+  //       setIsListening(true);
+  //       setStatusMessage("🎤 Activating microphone...");
+  //       recognitionRef.current.start();
+  //     } else {
+  //       recognitionRef.current.stop();
+  //       setIsListening(false);
+  //       setStatusMessage("⏹ Voice stopped manually.");
+  //     }
+  //   };
 
 
 
@@ -163,7 +168,9 @@ export default function JustiFindLanding() {
           description: data.law.description,
           ai_response: data.ai_response,
         },
+
       ]);
+      setLawCategory(data.law.category);
     } catch (error) {
       console.error(error);
       setResults([{ title: "Error", description: "❌ Error fetching result. Please try again." }]);
@@ -188,21 +195,41 @@ export default function JustiFindLanding() {
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
 
+        console.log("User Location:", { lat, lon });
+
         try {
-          const res = await axios.get(`http://127.0.0.1:5000/lawyers?lat=${lat}&lon=${lon}&limit=5`);
-          setLawyers(res.data.lawyers.slice(0, 5));
+          // Make the GET request
+          const url = `http://localhost:8080/lawyers/nearby?longitude=${lon}&latitude=${lat}&category=${encodeURIComponent(lawCategory)}&limit=5`;
+
+          console.log("Calling API:", url);
+
+          const res = await axios.get(url, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          console.log("Lawyers API Response:", res.data);
+
+          if (res.data && res.data.length > 0) {
+            setLawyers(res.data);
+          } else {
+            alert("No nearby lawyers found.");
+          }
         } catch (err) {
-          console.error(err);
+          console.error("Lawyers API Error:", err.response ? err.response.data : err.message);
+          alert("Error fetching nearby lawyers: " + (err.response?.data || err.message));
           setLawyers([]);
         }
 
         setLawyerLoading(false);
       },
       (error) => {
-        console.error(error);
-        alert("Location access denied. Please enable GPS and try again.");
+        console.error("Geolocation error:", error);
+        alert("Location access denied or unavailable. Please enable GPS and try again.");
         setLawyerLoading(false);
-      }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 } // more accurate location
     );
   };
 
@@ -210,6 +237,8 @@ export default function JustiFindLanding() {
     if (!text) return "";
     return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
   };
+  const hasAIResponse =
+    results.length > 0 && results[0]?.ai_response;
 
   return (
     <div className="min-h-screen  flex flex-col">
@@ -299,48 +328,62 @@ export default function JustiFindLanding() {
                   )}
                 </CardContent>
               </Card>
-              
+
             ))}
-            
+
           </section>
         )}
 
         {/* ✅ Nearby Lawyers Section */}
-        <section className="mt-12 max-w-3xl w-full text-center">
-          <Button onClick={fetchLawyers} disabled={lawyerLoading}>
-            {lawyerLoading ? "Finding..." : "Get Help"}
-          </Button>
+        {hasAIResponse && (
+          <section className="mt-12 max-w-3xl w-full text-center">
+            <Button onClick={fetchLawyers} disabled={lawyerLoading}>
+              {lawyerLoading ? "Finding..." : "Get Help"}
+            </Button>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-            {lawyers.map((lawyer, i) => (
-              <Card key={i}>
-                <CardContent>
-                  <h4 className="font-semibold text-lg text-gray-800">{lawyer.name}</h4>
-                  <p className="text-sm text-gray-600">📍 {lawyer.location}</p>
-                  <p className="text-sm text-gray-600">📞 {lawyer.contact}</p>
-                  <p className="text-sm text-gray-600">✉️ {lawyer.email}</p>
-                  <p className="text-sm text-gray-600">⚖️ {lawyer.category}</p>
-                  <p className="text-sm text-blue-600">Distance: {lawyer.distance.toFixed(2)} km</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+              {lawyers.map((lawyer, i) => (
+                <Card key={i}>
+                  <CardContent>
+                    <h4 className="font-semibold text-lg text-gray-800">{lawyer.name}</h4>
+                    <p className="text-sm text-gray-600">📍 {lawyer.city}</p>
+                    <p className="text-sm text-gray-600">📞 {lawyer.contact}</p>
+                    <p className="text-sm text-gray-600">✉️ {lawyer.email}</p>
+                    <p className="text-sm text-gray-600">⚖️ {lawyer.category}</p>
+                    <p className="text-sm text-blue-600">Distance: {lawyer.distance.toFixed(2)} km</p>
+                    {/* ✅ ADDED CHAT BUTTON HERE */}
+
+
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+          </section>
+        )}
 
         {/* Features */}
         <section className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
           {[
-            { title: "🤖 AI Chatbot Support",
-               desc: "Get instant legal answers in simple language." }
-               ,
-            { title: "📖 Know Your Rights", 
-              desc: "Read categorized laws & real-world examples." }
-              ,
-            { title: "📰 Legal News Feed",
-               desc: "Stay updated on important legal changes." }
-               ,
-            { title: "✅ Myths vs Facts", 
-              desc: "Clear common legal misconceptions." },
+            {
+              title: "🤖 AI Chatbot Support",
+              desc: "Get instant legal answers in simple language."
+            }
+            ,
+            {
+              title: "📖 Know Your Rights",
+              desc: "Read categorized laws & real-world examples."
+            }
+            ,
+            {
+              title: "📰 Legal News Feed",
+              desc: "Stay updated on important legal changes."
+            }
+            ,
+            {
+              title: "✅ Myths vs Facts",
+              desc: "Clear common legal misconceptions."
+            },
           ].map((feature) => (
             <Card key={feature.title}>
               <CardContent>
@@ -354,19 +397,19 @@ export default function JustiFindLanding() {
         <section className="mt-12 max-w-2xl w-full text-center">
           <h3 className="font-semibold text-lg mb-4">Popular Categories</h3>
           <div className="flex flex-wrap gap-3 justify-center">
-            {["Labour Laws", 
-            "Women Rights",
-             "Cyber Crime",
-              "Property Disputes", 
-              "RTI", 
+            {["Labour Laws",
+              "Women Rights",
+              "Cyber Crime",
+              "Property Disputes",
+              "RTI",
               "Consumer Rights"].map((cat) => (
-              <span
-                key={cat}
-                className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-blue-200"
-              >
-                {cat}
-              </span>
-            ))}
+                <span
+                  key={cat}
+                  className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-blue-200"
+                >
+                  {cat}
+                </span>
+              ))}
           </div>
         </section>
 
