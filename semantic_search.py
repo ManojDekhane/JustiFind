@@ -7,6 +7,9 @@ from geopy.distance import geodesic
 import requests
 import os 
 import pandas as pd
+from bs4 import BeautifulSoup
+from urllib.robotparser import RobotFileParser
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -119,6 +122,7 @@ User question: {user_query}
         return explanation or "No explanation returned."
     except requests.exceptions.RequestException as e:
         return f"AI service not reachable: {str(e)}"
+
 
 # ==========================================================
 
