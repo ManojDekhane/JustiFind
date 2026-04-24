@@ -21,7 +21,7 @@ csv_path = os.path.join(base_dir, "data", "CrimesAgainstPersonsLawsDataset.csv")
 # 1. Load Dataset
 # ==========================================================
 df = pd.read_csv(
-   "C:\\Users\\Shivani Katkar\\Downloads\\CrimesAgainstPersonsLawsDataset.csv",
+   "/home/manoj/Downloads/CrimesAgainstPersonsLawsDataset.csv",
 
     sep=',',
     quotechar='"',

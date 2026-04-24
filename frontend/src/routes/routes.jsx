@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "../component/landingPage";
+import LandingPage from "../component/LandingPage";
 import MythFactPage from "../pages/MythFactPage";
 import Navbar from "../component/Navbar";
 import  Layout from "../routes/Layout";
