@@ -31,7 +31,7 @@ public class securityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login/**", "/register/**","/news","/news/","/news/**","/lawyers/**").permitAll()
+                        .requestMatchers("/login/**", "/register/**","/news","/news/","/news/**","/lawyers/**", "/api/ai/**").permitAll()
                         .anyRequest().authenticated()   // <-- profile now needs JWT
                 );
 
