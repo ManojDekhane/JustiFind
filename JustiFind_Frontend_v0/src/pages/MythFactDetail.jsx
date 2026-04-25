@@ -6,8 +6,10 @@ const MythFactDetail = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  const data = mythFactDetailsData.find((item) => item.slug === slug);
+  // const data = mythFactDetailsData.find((item) => item.slug === slug);
 
+  const data = mythFactDetailsData.get(slug);
+  
   if (!data) {
     return <div className="p-10">Not Found</div>;
   }

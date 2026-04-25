@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { Bot, BookOpen, Newspaper, HelpCircle, ArrowRight, Zap, Shield, Clock } from 'lucide-react'
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Features() {
   const [isVisible, setIsVisible] = useState(false)
   const [hoveredCard, setHoveredCard] = useState(null)
   const sectionRef = useRef(null)
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -58,7 +61,7 @@ function Features() {
       color: 'from-amber-500 to-orange-500',
       shadow: 'shadow-amber-500/25',
       stats: '100+ myths busted',
-      link: '#',
+      link: '/myths',
     },
   ]
 
@@ -72,44 +75,40 @@ function Features() {
     <section ref={sectionRef} className="py-24 px-4 relative overflow-hidden">
       {/* Section background */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent/30 to-transparent" />
-      
+
       <div className="max-w-7xl mx-auto relative">
         {/* Section header */}
         <div className="text-center mb-16">
-          <div 
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6 transition-all duration-700 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
+          <div
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
           >
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
             <span className="text-sm font-medium text-muted-foreground">Powerful Features</span>
           </div>
-          
-          <h2 
-            className={`text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-4 transition-all duration-700 delay-100 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
+
+          <h2
+            className={`text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-4 transition-all duration-700 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
           >
             <span className="text-balance">Everything You Need for</span>
             <br />
             <span className="gradient-text">Legal Clarity</span>
           </h2>
-          
-          <p 
-            className={`text-lg text-muted-foreground max-w-2xl mx-auto text-pretty transition-all duration-700 delay-200 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
+
+          <p
+            className={`text-lg text-muted-foreground max-w-2xl mx-auto text-pretty transition-all duration-700 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
           >
-            Our comprehensive platform provides all the tools and resources you need 
+            Our comprehensive platform provides all the tools and resources you need
             to understand and navigate legal matters with confidence.
           </p>
         </div>
 
         {/* Highlights bar */}
-        <div 
-          className={`flex flex-wrap items-center justify-center gap-8 mb-16 transition-all duration-700 delay-300 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
+        <div
+          className={`flex flex-wrap items-center justify-center gap-8 mb-16 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
         >
           {highlights.map((highlight, index) => (
             <div key={highlight.label} className="flex items-center gap-3 group">
@@ -129,27 +128,33 @@ function Features() {
           {features.map((feature, index) => (
             <div
               key={feature.title}
-              className={`group relative transition-all duration-700 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
+              onClick={() => {
+                // feature.link !== "#" && navigate(feature.link)
+                if (feature.title === "AI Legal Assistant") {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                } else if (feature.link !== "#") {
+                  navigate(feature.link);
+                }
+              }}
+              className={`group relative cursor-pointer transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                }`}
               style={{ transitionDelay: `${400 + index * 100}ms` }}
               onMouseEnter={() => setHoveredCard(index)}
               onMouseLeave={() => setHoveredCard(null)}
             >
               {/* Card glow effect */}
-              <div 
-                className={`absolute -inset-px bg-gradient-to-br ${feature.color} rounded-2xl blur-sm transition-opacity duration-500 ${
-                  hoveredCard === index ? 'opacity-100' : 'opacity-0'
-                }`}
+              <div
+                className={`absolute -inset-px bg-gradient-to-br ${feature.color} rounded-2xl blur-sm transition-opacity duration-500 ${hoveredCard === index ? 'opacity-100' : 'opacity-0'
+                  }`}
               />
-              
+
               {/* Card content */}
               <div className="relative h-full glass rounded-2xl p-6 hover:bg-card/90 transition-all duration-500 overflow-hidden">
                 {/* Background gradient on hover */}
-                <div 
+                <div
                   className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
                 />
-                
+
                 {/* Icon */}
                 <div className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} ${feature.shadow} shadow-lg flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500`}>
                   <feature.icon className="w-7 h-7 text-white" />
@@ -159,7 +164,7 @@ function Features() {
                 <h3 className="text-xl font-display font-semibold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
                   {feature.title}
                 </h3>
-                
+
                 <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                   {feature.description}
                 </p>
@@ -171,13 +176,12 @@ function Features() {
                 </div>
 
                 {/* Link */}
-                <a 
-                  href={feature.link}
+                <div
                   className="flex items-center gap-2 text-sm font-medium text-primary group-hover:gap-3 transition-all duration-300"
                 >
                   Learn more
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                </a>
+                </div>
 
                 {/* Corner decoration */}
                 <div className={`absolute -bottom-4 -right-4 w-24 h-24 bg-gradient-to-br ${feature.color} rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500`} />

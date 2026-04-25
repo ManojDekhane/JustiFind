@@ -6,8 +6,10 @@ const MythFactHome = () => {
   const [search, setSearch] = useState("");
 
   const filtered = mythFactTopicData.filter((item) =>
-    item.title.toLowerCase().includes(search.toLowerCase())
+    item.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  console.log(mythFactTopicData);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-gray-100 px-6 py-10">

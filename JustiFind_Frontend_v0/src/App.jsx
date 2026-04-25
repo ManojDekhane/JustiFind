@@ -14,6 +14,8 @@ import NewsPage from './pages/NewsPage.jsx';
 import AIAssistantPage from './pages/AIAssistantPage.jsx'
 import MythFactHome from './pages/MythFactHome.jsx'
 import MythFactDetail from './pages/MythFactDetail.jsx'
+import CategoryPage from './pages/CategoryPage.jsx'
+import LawDetail from './pages/LawDetail.jsx'
 
 function App() {
   const [darkMode, setDarkMode] = useState(false)
@@ -77,6 +79,9 @@ function App() {
 
             <Route path='/myths' element={<MythFactHome />} />
             <Route path='/myth/:slug' element={<MythFactDetail />} />
+
+            <Route path="/category/:category" element={<CategoryPage />} />
+            <Route path="/law/:id" element={<LawDetail />} />
 
           </Routes>
 
