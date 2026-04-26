@@ -16,6 +16,9 @@ import MythFactHome from './pages/MythFactHome.jsx'
 import MythFactDetail from './pages/MythFactDetail.jsx'
 import CategoryPage from './pages/CategoryPage.jsx'
 import LawDetail from './pages/LawDetail.jsx'
+import RightsHome from './pages/Right_Home_Page.jsx';
+import RightCategoryPage from './pages/Rights_Category_Page.jsx';
+import RightsDetail from './pages/Rights_Detail_page.jsx';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false)
@@ -73,6 +76,9 @@ function App() {
             />
 
             {/* ✅ NEWS PAGE */}
+            <Route path="/rights" element={<RightsHome />} />
+        <Route path="/rights/category/:category" element={<RightCategoryPage />} />
+        <Route path="/rights/:slug" element={<RightsDetail />} />
             <Route path="/news" element={<NewsPage />} />
 
             <Route path='/assistant' element={<AIAssistantPage />} />
