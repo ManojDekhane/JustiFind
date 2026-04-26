@@ -4,7 +4,23 @@ import {
   Landmark, Shield, FileText, Scale, ArrowRight, Search
 } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
+import { lawData } from "../localData/lawData";
 
+const iconMap = {
+  "criminal-law": Shield,
+  "civil-law": Landmark,
+  "labour-law": Briefcase,
+  "consumer-law": ShoppingBag,
+  "business-law": Scale,
+};
+
+const colorMap = {
+  "criminal-law": "from-red-500 to-rose-500",
+  "civil-law": "from-purple-500 to-indigo-500",
+  "labour-law": "from-pink-500 to-purple-500",
+  "consumer-law": "from-orange-500 to-amber-500",
+  "business-law": "from-indigo-500 to-blue-500",
+};
 
 function Categories() {
   const [isVisible, setIsVisible] = useState(false)
@@ -12,7 +28,7 @@ function Categories() {
   const [hoveredCategory, setHoveredCategory] = useState(null)
   const sectionRef = useRef(null)
   const navigate = useNavigate();
-  
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -31,81 +47,99 @@ function Categories() {
     return () => observer.disconnect()
   }, [])
 
-  const categories = [
-    {
-      icon: Home,
-      name: 'Property & Housing',
-      slug: 'property-housing',
-      count: 45,
-      color: 'from-blue-500 to-cyan-500'
-    },
-    {
-      icon: Briefcase,
-      name: 'Employment',
-      slug: 'employment',
-      count: 38,
-      color: 'from-purple-500 to-pink-500'
-    },
-    {
-      icon: Users,
-      name: 'Family Law',
-      slug: 'family-law',
-      count: 52,
-      color: 'from-rose-500 to-red-500'
-    },
-    {
-      icon: ShoppingBag,
-      name: 'Consumer Rights',
-      slug: 'consumer-rights',
-      count: 29,
-      color: 'from-amber-500 to-orange-500'
-    },
-    {
-      icon: Heart,
-      name: 'Healthcare',
-      slug: 'healthcare',
-      count: 31,
-      color: 'from-emerald-500 to-teal-500'
-    },
-    {
-      icon: Car,
-      name: 'Traffic & Vehicle',
-      slug: 'traffic-vehicle',
-      count: 24,
-      color: 'from-indigo-500 to-blue-500'
-    },
-    {
-      icon: Landmark,
-      name: 'Civil Rights',
-      slug: 'civil-rights',
-      count: 41,
-      color: 'from-fuchsia-500 to-purple-500'
-    },
-    {
-      icon: Shield,
-      name: 'Criminal Law',
-      slug: 'criminal-law',
-      count: 36,
-      color: 'from-red-500 to-rose-500'
-    },
-    {
-      icon: FileText,
-      name: 'Contracts',
-      slug: 'contracts',
-      count: 27,
-      color: 'from-cyan-500 to-teal-500'
-    },
-    {
-      icon: Scale,
-      name: 'Business Law',
-      slug: 'business-law',
-      count: 33,
-      color: 'from-violet-500 to-indigo-500'
-    },
-  ]
+  // const categories = [
+  //   {
+  //     icon: Home,
+  //     name: 'Property & Housing',
+  //     slug: 'property-housing',
+  //     count: 45,
+  //     color: 'from-blue-500 to-cyan-500'
+  //   },
+  //   {
+  //     icon: Briefcase,
+  //     name: 'Employment',
+  //     slug: 'employment',
+  //     count: 38,
+  //     color: 'from-purple-500 to-pink-500'
+  //   },
+  //   {
+  //     icon: Users,
+  //     name: 'Family Law',
+  //     slug: 'family-law',
+  //     count: 52,
+  //     color: 'from-rose-500 to-red-500'
+  //   },
+  //   {
+  //     icon: ShoppingBag,
+  //     name: 'Consumer Rights',
+  //     slug: 'consumer-rights',
+  //     count: 29,
+  //     color: 'from-amber-500 to-orange-500'
+  //   },
+  //   {
+  //     icon: Heart,
+  //     name: 'Healthcare',
+  //     slug: 'healthcare',
+  //     count: 31,
+  //     color: 'from-emerald-500 to-teal-500'
+  //   },
+  //   {
+  //     icon: Car,
+  //     name: 'Traffic & Vehicle',
+  //     slug: 'traffic-vehicle',
+  //     count: 24,
+  //     color: 'from-indigo-500 to-blue-500'
+  //   },
+  //   {
+  //     icon: Landmark,
+  //     name: 'Civil Rights',
+  //     slug: 'civil-rights',
+  //     count: 41,
+  //     color: 'from-fuchsia-500 to-purple-500'
+  //   },
+  //   {
+  //     icon: Shield,
+  //     name: 'Criminal Law',
+  //     slug: 'criminal-law',
+  //     count: 36,
+  //     color: 'from-red-500 to-rose-500'
+  //   },
+  //   {
+  //     icon: FileText,
+  //     name: 'Contracts',
+  //     slug: 'contracts',
+  //     count: 27,
+  //     color: 'from-cyan-500 to-teal-500'
+  //   },
+  //   {
+  //     icon: Scale,
+  //     name: 'Business Law',
+  //     slug: 'business-law',
+  //     count: 33,
+  //     color: 'from-violet-500 to-indigo-500'
+  //   },
+  // ]
+
+  const categoryMap = {};
+
+  lawData.forEach((law) => {
+    if (!categoryMap[law.category]) {
+      categoryMap[law.category] = {
+        name: law.categoryName,
+        slug: law.category,
+        count: 0,
+        icon: iconMap[law.category] || Scale,
+        color: colorMap[law.category] || "from-indigo-500 to-blue-500",
+      };
+    }
+
+    categoryMap[law.category].count++;
+  });
+
+  const categories = Object.values(categoryMap);
 
   const filteredCategories = categories.filter(cat =>
-    cat.name.toLowerCase().includes(searchQuery.toLowerCase())
+    (cat.name || "").toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
