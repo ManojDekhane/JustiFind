@@ -6,8 +6,8 @@ const mythFactDescriptionData = new Map([
       myth: "The Constitution gives us our rights.",
       fact: "Our rights exist naturally; the Constitution only recognizes and protects them, it doesn’t create them.",
       description:
-        "Many believe the Constitution 'gives' us rights, but in reality, it only guarantees and protects rights that people already have as part of being free citizens. The Constitution limits government power and ensures that these rights cannot be taken away easily.",
-    },
+        "The Constitution gives people basic rights like freedom and equality. But these rights are not absolute and can have reasonable limits. Rights are balanced with duties and public interest. Courts protect these rights if violated. Some rights apply only to citizens, others to everyone. The government cannot take them away arbitrarily."
+        },
   ],
   [
     "president-holds-supreme-power",
@@ -15,9 +15,8 @@ const mythFactDescriptionData = new Map([
       title: "President Holds Supreme Power",
       myth: "The President has ultimate authority over the nation.",
       fact: "India follows a parliamentary system where real power lies with the Council of Ministers led by the Prime Minister.",
-      description:
-        "While the President is India’s constitutional head, most powers are exercised on the advice of the Prime Minister and the Cabinet. The President’s role is largely ceremonial, ensuring decisions follow the Constitution rather than personal authority.",
-    },
+      description: "The President is the head of the country but not all-powerful. Real executive power lies with the Prime Minister and Council of Ministers. The President mostly acts on their advice. Some powers are discretionary but limited. Role is more ceremonial with constitutional importance. System ensures no single person controls everything."
+      },
   ],
   [
     "constitution-unchangeable",
@@ -25,9 +24,8 @@ const mythFactDescriptionData = new Map([
       title: "Constitution Is Unchangeable",
       myth: "The Constitution cannot be changed or amended.",
       fact: "The Constitution can be amended under Article 368 by Parliament to meet changing needs of society.",
-      description:
-        "The Indian Constitution is flexible and allows amendments so it can evolve with time. This helps the government adapt to new challenges while maintaining democratic values and protecting citizens’ rights.",
-    },
+      description: "The Constitution can be amended when needed. Amendments follow a legal process. Parliament has the power to make changes. Some parts need approval from states too. Basic structure cannot be changed. This keeps it flexible yet stable."
+      },
   ],
   [
     "fundamental-rights-unlimited",
@@ -36,8 +34,8 @@ const mythFactDescriptionData = new Map([
       myth: "Fundamental Rights can be used without any restriction.",
       fact: "Fundamental Rights are subject to reasonable restrictions to protect public order, morality, and national interest.",
       description:
-        "Rights like free speech and movement come with limits to ensure harmony and security. For example, speech that promotes violence or hatred can be restricted under law. This balance helps protect both freedom and public welfare.",
-    },
+        "Rights are not unlimited; they have reasonable restrictions. Restrictions ensure public safety and order. Example: free speech cannot promote violence. Laws define these limits clearly. Courts decide if restrictions are fair. Balance between individual freedom and society."
+      },
   ],
   [
     "only-citizens-have-rights",
@@ -46,8 +44,8 @@ const mythFactDescriptionData = new Map([
       myth: "Only Indian citizens enjoy legal rights under the Constitution.",
       fact: "Many rights, such as the right to equality and life, are available to all persons, not just citizens.",
       description:
-        "While some rights like voting are for citizens only, others — such as the right to life and protection from discrimination — apply to everyone within India’s territory, including foreigners. This reflects India’s commitment to human rights.",
-    },
+        "Some rights are only for citizens (like voting). But many rights apply to all persons, including foreigners. Example: right to life and equality. Everyone is protected under law. This ensures fairness and justice. Human dignity is protected universally."
+      },
   ],
   [
     "constitution-defines-govt-powers",
@@ -56,8 +54,8 @@ const mythFactDescriptionData = new Map([
       myth: "The Constitution only sets government powers and structure.",
       fact: "It also defines citizens’ rights, duties, and limits of government authority.",
       description:
-        "The Constitution is not just about how the government functions; it’s a document that ensures accountability, balance of power, and protection of individual freedoms. It guides both citizens and the state in maintaining democracy.",
-    },
+        "It not only gives powers but also limits them. It protects citizens from misuse of authority. Defines rights, duties, and responsibilities. Guides how laws are made and applied. Ensures balance between power and freedom. Acts as a rulebook for the country."
+      },
   ],
   [
     "constitution-is-just-a-legal-paper",
@@ -66,18 +64,18 @@ const mythFactDescriptionData = new Map([
       myth: "The Constitution is merely a legal document with rules.",
       fact: "It’s a living document that shapes India’s democracy, values, and governance.",
       description:
-        "The Constitution goes beyond legal text — it reflects India’s history, freedom struggle, and vision for justice and equality. It’s interpreted and applied dynamically to meet the nation’s evolving social and political needs.",
-    },
+        "It is the foundation of the country’s system. Guides government functioning and laws. Protects rights of people. Courts use it to give judgments. It has real impact on daily life. Not just theory, but practical authority."
+      },
   ],
-   [
+  [
     "police-can-arrest-anyone",
     {
       title: "Police Can Arrest Anyone",
       myth: "Police can arrest anyone anytime without reason.",
       fact: "Arrests require legal grounds and due procedure under law.",
       description:
-        "Police must have valid reasons and follow lawful procedures before arresting someone — arbitrary arrests are punishable under Indian law.",
-    },
+        "Police cannot arrest without proper reason. Arrest must follow legal procedure. Rights of arrested person must be protected. You have the right to know the reason for arrest. You can contact a lawyer. Illegal arrests can be challenged in court."
+      },
   ],
   [
     "accused-means-guilty",
@@ -86,8 +84,8 @@ const mythFactDescriptionData = new Map([
       myth: "If someone is accused, they are automatically guilty.",
       fact: "Everyone is presumed innocent until proven guilty in court.",
       description:
-        "Being accused doesn’t mean guilt. The justice system ensures fair trial and evidence-based judgment before declaring anyone guilty.",
-    },
+        "Being accused does not mean you are guilty. Everyone is innocent until proven guilty. Proof must be shown in court. Fair trial is a fundamental right. Evidence is necessary for conviction. Prevents misuse of law."
+      },
   ],
   [
     "bail-avoids-punishment",
@@ -96,8 +94,8 @@ const mythFactDescriptionData = new Map([
       myth: "Getting bail means escaping punishment.",
       fact: "Bail is a temporary release until trial, not freedom from law.",
       description:
-        "Bail protects the accused’s liberty during trial but doesn’t affect the outcome. If found guilty, punishment still applies.",
-    },
+        "Bail is temporary release, not freedom from punishment. Case continues in court after bail. Accused must follow court conditions. If found guilty, punishment still applies. Bail ensures freedom before final judgment. It protects personal liberty."
+      },
   ],
   [
     "minors-are-not-punished",
@@ -106,8 +104,8 @@ const mythFactDescriptionData = new Map([
       myth: "Children committing crimes face no punishment.",
       fact: "Juveniles are held accountable under special juvenile laws.",
       description:
-        "Minors are tried under the Juvenile Justice Act, focusing on rehabilitation rather than punishment, depending on the nature of the crime.",
-    },
+        "Minors can be punished under special laws. Juvenile Justice system handles such cases. Focus is more on reform than punishment. Serious crimes may lead to stricter action. Age is considered in decision-making. Goal is rehabilitation."
+      },
   ],
   [
     "only-men-face-charges",
@@ -116,8 +114,8 @@ const mythFactDescriptionData = new Map([
       myth: "Criminal laws apply only to men.",
       fact: "Anyone, regardless of gender, can be charged for crimes.",
       description:
-        "Indian criminal law applies equally to all individuals — men, women, or others — ensuring equality before the law.",
-    },
+        "Law applies equally to men and women. Women can also be accused of crimes. Some laws give special protection to women. Gender does not decide guilt. Courts treat everyone fairly. Justice system is neutral."
+      },
   ],
   [
     "self-defense-is-illegal",
@@ -126,179 +124,179 @@ const mythFactDescriptionData = new Map([
       myth: "Defending yourself or others is a punishable act.",
       fact: "Law protects the right to act in self-defense under certain limits.",
       description:
-        "Sections 96–106 of the IPC allow self-defense against harm or unlawful attacks, as long as it’s reasonable and proportionate.",
+        "Self-defense is legally allowed. You can protect yourself from harm. Force used must be reasonable. Cannot exceed necessary limit. Law supports protection of life. Misuse of self-defense is not allowed."
+      },
+  ],
+  [
+    "civil-cases-are-about-money",
+    {
+      title: "Civil Cases Are About Money",
+      myth: "Civil cases are only about financial disputes or compensation.",
+      fact: "Civil law also deals with rights, property, family, and personal matters beyond money.",
+      description:
+        "Civil cases involve rights, property, and agreements. Not always about money. Can include family disputes, contracts, etc. Aim is to resolve conflicts peacefully. Compensation may be part of outcome. Focus is on justice, not just money."
+      },
+  ],
+  [
+    "winning-ends-dispute",
+    {
+      title: "Winning Ends Dispute",
+      myth: "Winning a civil case permanently ends the dispute.",
+      fact: "Even after judgment, cases can continue through appeals or enforcement issues.",
+      description:
+        "Winning a case doesn’t always end the issue. Other party can file an appeal. Enforcement of judgment is needed. Disputes may continue legally. Some matters take time to fully resolve. Legal process can have multiple stages."
+      },
+  ],
+  [
+    "cases-give-quick-results",
+    {
+      title: "Cases Give Quick Results",
+      myth: "Filing a civil case ensures a quick judgment.",
+      fact: "Civil cases can take time due to evidence, procedure, and appeals.",
+      description:
+        "Legal cases often take time. Depends on complexity and evidence. Courts follow proper procedures. Delays can happen due to workload. Some fast-track courts exist. Patience is important in legal matters."
+      },
+  ],
+  [
+    "settlement-means-guilt",
+    {
+      title: "Settlement Means Guilt",
+      myth: "Agreeing to settle a case out of court means admitting guilt.",
+      fact: "Settlements are often practical agreements to save time, money, and stress.",
+      description:
+        "Settlement is not admission of guilt. It is a mutual agreement to resolve dispute. Saves time and legal costs. Common in civil cases. Both parties agree voluntarily. Helps avoid long court battles."
+      },
+  ],
+  [
+    "cant-win-against-companies",
+    {
+      title: "Can’t Win Against Companies",
+      myth: "Ordinary people cannot win cases against large corporations.",
+      fact: "Courts treat all parties equally under the law, regardless of status or size.",
+      description:
+        "Individuals can win cases against companies. Consumer laws protect people. Courts ensure fairness. Evidence and law matter, not size. Many cases prove individuals succeed. Justice system supports equality."
+      },
+  ],
+  [
+    "can-file-anytime",
+    {
+      title: "Can File Anytime",
+      myth: "Anyone can file a civil case whenever they want.",
+      fact: "Every case must be filed within a specific time limit known as the limitation period.",
+      description:
+        "Cases must be filed within limitation period. Delay can lead to rejection. Different cases have different time limits. Law ensures timely justice. Exceptions exist in special cases. Important to act quickly."
+      },
+  ],
+  [
+    "only-rich-afford-cases",
+    {
+      title: "Only Rich Afford Cases",
+      myth: "Filing or fighting civil cases is only for the wealthy.",
+      fact: "Legal aid and public interest litigation make justice accessible to all citizens.",
+      description:
+        "Legal help is available for everyone. Free legal aid is provided by government. Courts have low-cost options. Not only rich people can fight cases. Awareness helps access justice. Law is for all citizens."
+      },
+  ],
+  [
+    "wills-for-wealthy-only",
+    {
+      title: "Wills for Wealthy Only",
+      myth: "Only rich people need to write wills.",
+      fact: "A will is important for anyone who owns property, savings, or belongings.",
+      description:
+        "Anyone can make a will. It helps distribute property after death. Avoids family disputes. Simple and useful for all. No need to be rich. Ensures clarity and peace."
+      },
+  ],
+  [
+    "lawyers-twist-law",
+    {
+      title: "Lawyers Twist Law",
+      myth: "Lawyers manipulate legal loopholes to win cases.",
+      fact: "Lawyers represent clients within ethical and legal boundaries.",
+      description:
+        "Lawyers interpret law, not twist it. They present arguments for clients. Court decides what is correct. Law is based on rules and evidence. Ethical standards guide lawyers. Misuse is punishable."
+      },
+  ],
+  [
+    "admins-have-unlimited-power",
+    {
+      title: "Admins Have Unlimited Power",
+      myth: "Administrative authorities can use power without limits.",
+      fact: "Their powers are restricted by law and subject to judicial review.",
+      description:
+        "Administrative authorities have limits. Their actions must follow law. Courts can review decisions. Abuse of power can be challenged. Transparency is required. Power is controlled by rules."
+      },
+  ],
+  [
+    "govt-decisions-cant-be-challenged",
+    {
+      title: "Govt Decisions Can’t Be Challenged",
+      myth: "Decisions made by government officials are final and unquestionable.",
+      fact: "Any arbitrary or unlawful decision can be challenged in court.",
+      description:
+        "Government decisions can be challenged in court. Judicial review ensures fairness. Courts check legality of actions. Citizens can file petitions. Protects against misuse of power. Ensures accountability."
+      },
+  ],
+  [
+    "admin-law-for-employees-only",
+    {
+      title: "Admin Law for Employees Only",
+      myth: "Administrative law applies only to government employees.",
+      fact: "It governs all government actions affecting citizens.",
+      description:
+        "Administrative law regulates the relationship between public authorities and citizens, not just employees.",
     },
   ],
   [
-  "civil-cases-are-about-money",
-  {
-    title: "Civil Cases Are About Money",
-    myth: "Civil cases are only about financial disputes or compensation.",
-    fact: "Civil law also deals with rights, property, family, and personal matters beyond money.",
-    description:
-      "Civil law covers a wide range of issues such as property ownership, family disputes, contracts, and inheritance. It’s not limited to financial compensation but ensures fair treatment and protection of individual rights.",
-  },
-],
-[
-  "winning-ends-dispute",
-  {
-    title: "Winning Ends Dispute",
-    myth: "Winning a civil case permanently ends the dispute.",
-    fact: "Even after judgment, cases can continue through appeals or enforcement issues.",
-    description:
-      "Winning a civil case doesn’t always mean the end. The losing party can appeal to a higher court, or enforcement of the court’s order can take time. True resolution often requires compliance and mutual understanding.",
-  },
-],
-[
-  "cases-give-quick-results",
-  {
-    title: "Cases Give Quick Results",
-    myth: "Filing a civil case ensures a quick judgment.",
-    fact: "Civil cases can take time due to evidence, procedure, and appeals.",
-    description:
-      "Civil court proceedings involve multiple stages — filing, evidence, arguments, and sometimes mediation. The goal is fairness, not speed, so cases may take longer to ensure justice for both sides.",
-  },
-],
-[
-  "settlement-means-guilt",
-  {
-    title: "Settlement Means Guilt",
-    myth: "Agreeing to settle a case out of court means admitting guilt.",
-    fact: "Settlements are often practical agreements to save time, money, and stress.",
-    description:
-      "Out-of-court settlements don’t mean guilt. Many parties choose settlement to resolve issues faster and avoid lengthy legal battles, without any formal admission of fault.",
-  },
-],
-[
-  "cant-win-against-companies",
-  {
-    title: "Can’t Win Against Companies",
-    myth: "Ordinary people cannot win cases against large corporations.",
-    fact: "Courts treat all parties equally under the law, regardless of status or size.",
-    description:
-      "The Indian judiciary ensures fairness and equality before the law. Consumer protection and civil rights laws empower individuals to challenge even big companies through proper legal procedures.",
-  },
-],
-[
-  "can-file-anytime",
-  {
-    title: "Can File Anytime",
-    myth: "Anyone can file a civil case whenever they want.",
-    fact: "Every case must be filed within a specific time limit known as the limitation period.",
-    description:
-      "The Limitation Act sets deadlines for filing cases depending on the dispute type. Missing this time limit can result in dismissal, ensuring legal certainty and timely justice.",
-  },
-],
-[
-  "only-rich-afford-cases",
-  {
-    title: "Only Rich Afford Cases",
-    myth: "Filing or fighting civil cases is only for the wealthy.",
-    fact: "Legal aid and public interest litigation make justice accessible to all citizens.",
-    description:
-      "The Legal Services Authorities Act provides free legal aid to people with limited means. Civil cases can also be handled through Lok Adalats or mediation, reducing costs and delays.",
-  },
-],
-[
-  "wills-for-wealthy-only",
-  {
-    title: "Wills for Wealthy Only",
-    myth: "Only rich people need to write wills.",
-    fact: "A will is important for anyone who owns property, savings, or belongings.",
-    description:
-      "Writing a will ensures that your assets are distributed as per your wishes after death, regardless of wealth. It prevents family disputes and provides legal clarity on inheritance.",
-  },
-],
-[
-  "lawyers-twist-law",
-  {
-    title: "Lawyers Twist Law",
-    myth: "Lawyers manipulate legal loopholes to win cases.",
-    fact: "Lawyers represent clients within ethical and legal boundaries.",
-    description:
-      "Lawyers are bound by the Bar Council of India’s code of conduct to uphold justice. Their duty is to defend clients’ rights fairly and honestly while respecting the court’s integrity.",
-  },
-],
-[
-  "admins-have-unlimited-power",
-  {
-    title: "Admins Have Unlimited Power",
-    myth: "Administrative authorities can use power without limits.",
-    fact: "Their powers are restricted by law and subject to judicial review.",
-    description:
-      "Administrative authorities must act within legal limits. Courts can review and strike down actions that exceed or misuse power.",
-  },
-],
-[
-  "govt-decisions-cant-be-challenged",
-  {
-    title: "Govt Decisions Can’t Be Challenged",
-    myth: "Decisions made by government officials are final and unquestionable.",
-    fact: "Any arbitrary or unlawful decision can be challenged in court.",
-    description:
-      "Judicial review ensures citizens can challenge administrative decisions violating rights or exceeding authority.",
-  },
-],
-[
-  "admin-law-for-employees-only",
-  {
-    title: "Admin Law for Employees Only",
-    myth: "Administrative law applies only to government employees.",
-    fact: "It governs all government actions affecting citizens.",
-    description:
-      "Administrative law regulates the relationship between public authorities and citizens, not just employees.",
-  },
-],
-[
-  "no-remedy-for-power-misuse",
-  {
-    title: "No Remedy for Power Misuse",
-    myth: "Citizens can’t take action against misuse of power by authorities.",
-    fact: "Courts offer remedies like writs against abuse of power.",
-    description:
-      "Citizens can approach courts for relief under Articles 32 and 226 of the Constitution to challenge arbitrary government actions.",
-  },
-],
-[
-  "not-part-of-constitutional-law",
-  {
-    title: "Not Part of Constitutional Law",
-    myth: "Administrative law is completely separate from constitutional law.",
-    fact: "It draws its foundation and authority from constitutional principles.",
-    description:
-      "Administrative law operates under the Constitution, ensuring that government actions align with constitutional rights and limits.",
-  },
-],
-[
-  "admin-actions-are-final",
-  {
-    title: "Admin Actions Are Final",
-    myth: "Administrative decisions are conclusive and cannot be reviewed.",
-    fact: "Courts can review administrative actions for fairness and legality.",
-    description:
-      "The judiciary has the power to review administrative actions to prevent injustice, bias, or violation of legal principles.",
-  },
-],
-[
-  "only-about-rules-and-procedures",
-  {
-    title: "Only About Rules and Procedures",
-    myth: "Administrative law only covers rules, forms, and paperwork.",
-    fact: "It ensures fairness, accountability, and transparency in governance.",
-    description:
-      "Administrative law protects citizens’ rights by ensuring government bodies follow just and reasonable procedures.",
-  },
-],
-[
-  "weakens-government-efficiency",
-  {
-    title: "Weakens Government Efficiency",
-    myth: "Administrative law slows down and weakens governance.",
-    fact: "It improves efficiency through accountability and checks on power.",
-    description:
-      "By promoting transparency and fairness, administrative law strengthens good governance and public trust.",
-  },
-],
+    "no-remedy-for-power-misuse",
+    {
+      title: "No Remedy for Power Misuse",
+      myth: "Citizens can’t take action against misuse of power by authorities.",
+      fact: "Courts offer remedies like writs against abuse of power.",
+      description:
+        "Legal remedies exist for misuse of power. Courts provide relief and justice. Complaints can be filed. Authorities can be held accountable. Rights can be enforced. Law protects individuals."
+      },
+  ],
+  [
+    "not-part-of-constitutional-law",
+    {
+      title: "Not Part of Constitutional Law",
+      myth: "Administrative law is completely separate from constitutional law.",
+      fact: "It draws its foundation and authority from constitutional principles.",
+      description:
+        "Administrative law operates under the Constitution, ensuring that government actions align with constitutional rights and limits.",
+    },
+  ],
+  [
+    "admin-actions-are-final",
+    {
+      title: "Admin Actions Are Final",
+      myth: "Administrative decisions are conclusive and cannot be reviewed.",
+      fact: "Courts can review administrative actions for fairness and legality.",
+      description:
+        "The judiciary has the power to review administrative actions to prevent injustice, bias, or violation of legal principles.",
+    },
+  ],
+  [
+    "only-about-rules-and-procedures",
+    {
+      title: "Only About Rules and Procedures",
+      myth: "Administrative law only covers rules, forms, and paperwork.",
+      fact: "It ensures fairness, accountability, and transparency in governance.",
+      description:
+        "Administrative law protects citizens’ rights by ensuring government bodies follow just and reasonable procedures.",
+    },
+  ],
+  [
+    "weakens-government-efficiency",
+    {
+      title: "Weakens Government Efficiency",
+      myth: "Administrative law slows down and weakens governance.",
+      fact: "It improves efficiency through accountability and checks on power.",
+      description:
+        "By promoting transparency and fairness, administrative law strengthens good governance and public trust.",
+    },
+  ],
   // Family Law
   [
     "divorce-ends-all-ties",

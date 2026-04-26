@@ -1,6 +1,31 @@
 import { Scale, Twitter, Linkedin, Github, Mail, MapPin, Phone, Heart, ArrowUp } from 'lucide-react'
+import { useState } from 'react'
 
 function Footer() {
+  const [email, setEmail] = useState("")
+  const [submitted, setSubmitted] = useState(false)
+
+  const handleSubscribe = async () => {
+    if (!email) return
+
+    const formUrl =
+      "https://docs.google.com/forms/d/e/1FAIpQLSezbTpsWR6XbOhE-10_f6X3cE80sO11PaNbPCPI10gxeOr_Cw/formResponse"
+
+    const formData = new FormData()
+    formData.append("entry.700522015", email) // 👈 replace with your field ID
+
+    await fetch(formUrl, {
+      method: "POST",
+      mode: "no-cors",
+      body: formData,
+    })
+
+    setEmail("")
+    setSubmitted(true)
+
+    setTimeout(() => setSubmitted(false), 3000)
+  }
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -45,7 +70,7 @@ function Footer() {
     <footer className="relative pt-24 pb-8 px-4 overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-accent/50 to-transparent" />
-      
+
       <div className="max-w-7xl mx-auto relative">
         {/* Top section */}
         <div className="grid lg:grid-cols-2 gap-12 mb-16 pb-16 border-b border-border/50">
@@ -60,9 +85,9 @@ function Footer() {
                 <span className="text-foreground">Find</span>
               </span>
             </a>
-            
+
             <p className="text-muted-foreground max-w-md leading-relaxed">
-              Making legal information accessible to everyone. Our AI-powered platform helps you 
+              Making legal information accessible to everyone. Our AI-powered platform helps you
               understand your rights and navigate complex legal matters with confidence.
             </p>
 
@@ -101,7 +126,7 @@ function Footer() {
                 <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.name}>
-                      <a 
+                      <a
                         href={link.href}
                         className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200 animated-underline inline-block"
                       >
@@ -116,8 +141,10 @@ function Footer() {
         </div>
 
         {/* Newsletter */}
+        {/* Newsletter */}
         <div className="glass rounded-2xl p-8 mb-16">
           <div className="grid lg:grid-cols-2 gap-8 items-center">
+
             <div>
               <h3 className="text-xl font-display font-semibold text-foreground mb-2">
                 Stay Updated
@@ -126,27 +153,43 @@ function Footer() {
                 Get the latest legal news, updates, and tips delivered to your inbox.
               </p>
             </div>
-            <div className="flex gap-3">
+
+            <div className="flex gap-3 flex-col sm:flex-row">
+
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address"
                 className="flex-1 h-12 px-4 glass rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300"
               />
-              <button className="px-6 h-12 bg-gradient-to-r from-primary to-cyan-500 text-primary-foreground font-medium rounded-xl hover:shadow-lg hover:shadow-primary/40 hover:scale-105 transition-all duration-300">
+
+              <button
+                onClick={handleSubscribe}
+                className="px-6 h-12 bg-gradient-to-r from-primary to-cyan-500 text-primary-foreground font-medium rounded-xl hover:shadow-lg hover:shadow-primary/40 hover:scale-105 transition-all duration-300"
+              >
                 Subscribe
               </button>
             </div>
+
+            {/* Success message */}
+            {submitted && (
+              <p className="text-green-500 text-sm mt-2">
+                🎉 Subscribed successfully!
+              </p>
+            )}
+
           </div>
         </div>
 
         {/* Bottom section */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground flex items-center gap-1">
-            © {new Date().getFullYear()} JustiFind. Made with 
-            <Heart className="w-4 h-4 text-red-500 fill-current animate-pulse" /> 
+            © {new Date().getFullYear()} JustiFind. Made with
+            <Heart className="w-4 h-4 text-red-500 fill-current animate-pulse" />
             for everyone.
           </p>
-          
+
           {/* Back to top */}
           <button
             onClick={scrollToTop}
