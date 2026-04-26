@@ -20,7 +20,7 @@ const MythFactCard = ({ item }) => {
         {/* <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
         <p className="text-gray-600 text-sm">{item.short}</p> */}
 
-        <h2 className="text-xl font-semibold mb-2">{item.name}</h2>
+        <h2 className="text-xl font-semibold mb-2 text-primary">{item.name}</h2>
         <p className="text-gray-600 text-sm">Click to explore myth vs fact</p>
 
         <div className="mt-4 text-primary font-medium">
