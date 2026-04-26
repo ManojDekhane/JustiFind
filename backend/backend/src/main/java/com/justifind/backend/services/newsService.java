@@ -15,7 +15,9 @@ import java.util.Map;
 @Service
 public class newsService {
     public List<Map<String, String>> fetchLegalNews() throws Exception {
-        URL feedUrl = new URL("https://www.barandbench.com/feed");
+//        URL feedUrl = new URL("https://www.jurist.org/news/feed/");
+
+        URL feedUrl = new URL("https://www.jurist.org/news/feed/");
         SyndFeedInput input = new SyndFeedInput();
         SyndFeed feed = input.build(new XmlReader(feedUrl));
 
