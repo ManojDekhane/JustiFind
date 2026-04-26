@@ -16,6 +16,7 @@ import MythFactHome from './pages/MythFactHome.jsx'
 import MythFactDetail from './pages/MythFactDetail.jsx'
 import CategoryPage from './pages/CategoryPage.jsx'
 import LawDetail from './pages/LawDetail.jsx'
+import ScrollToTop from './components/ScrollToTop.jsx'
 
 function App() {
   const [darkMode, setDarkMode] = useState(false)
@@ -39,6 +40,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className={`min-h-screen bg-background text-foreground transition-colors duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
 
         {/* background stays OUTSIDE routes */}

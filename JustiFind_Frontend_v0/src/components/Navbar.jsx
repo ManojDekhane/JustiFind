@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Menu, X, Sun, Moon, Scale, ChevronDown } from 'lucide-react'
 import { Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Navbar({ darkMode, setDarkMode }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState(null)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -117,15 +120,21 @@ function Navbar({ darkMode, setDarkMode }) {
             {/* CTA Button */}
             <button
               onClick={() => {
-                const input = document.getElementById("searchInput");
+                if (location.pathname !== "/") {
+                  navigate("/") // go to home
+                  return
+                } 
+                
+                  const input = document.getElementById("searchInput")
 
-                if (input) {
-                  input.scrollIntoView({ behavior: "smooth", block: "center" });
+                  if (input) {
+                    input.scrollIntoView({ behavior: "smooth", block: "center" })
 
-                  setTimeout(() => {
-                    input.focus();
-                  }, 500);
-                }
+                    setTimeout(() => {
+                      input.focus()
+                    }, 500)
+                  }
+                
               }}
               className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-cyan-500 text-primary-foreground font-medium text-sm rounded-xl shadow-lg hover:scale-105 transition-all duration-300"
             >
