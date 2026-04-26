@@ -6,13 +6,16 @@ const MythFactDetail = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  // const data = mythFactDetailsData.find((item) => item.slug === slug);
-
   const data = mythFactDetailsData.get(slug);
-  
+
   if (!data) {
     return <div className="p-10">Not Found</div>;
   }
+
+  const descriptionPoints = data.description
+    .split(".")
+    .map(sentence => sentence.trim())
+    .filter(sentence => sentence.length > 0)
 
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10">
@@ -53,40 +56,42 @@ const MythFactDetail = () => {
       {/* EXPLANATION */}
       <div className="mt-10 bg-white p-6 rounded-2xl shadow">
         <h3 className="text-xl font-semibold mb-3 text-primary">Explanation</h3>
-        <p className="text-gray-700 leading-relaxed">
-          {data.description}
-        </p>
+        <ul className="space-y-3 text-gray-700 leading-relaxed list-disc pl-5">
+          {descriptionPoints.map((point, index) => (
+            <li key={index}>{point}.</li>
+          ))}
+        </ul>
       </div>
       {/* FOOTER SOURCE TEXT */}
-<div className="fixed bottom-4 right-4 text-xs text-gray-500 bg-white/80 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm border">
-  <span className="font-medium text-gray-600">Sources:</span>
-  <a
-    href="https://www.livelaw.in"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="ml-2 hover:text-primary hover:underline"
-  >
-    Live Law
-  </a>
-  <span className="mx-1">•</span>
-  <a
-    href="https://www.barandbench.com"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="hover:text-primary hover:underline"
-  >
-    Bar & Bench
-  </a>
-  <span className="mx-1">•</span>
-  <a
-    href="https://indiankanoon.org"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="hover:text-primary hover:underline"
-  >
-    Indian Kanoon
-  </a>
-</div>
+      <div className="fixed bottom-4 right-4 text-xs text-gray-500 bg-white/80 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm border">
+        <span className="font-medium text-gray-600">Sources:</span>
+        <a
+          href="https://www.livelaw.in"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="ml-2 hover:text-primary hover:underline"
+        >
+          Live Law
+        </a>
+        <span className="mx-1">•</span>
+        <a
+          href="https://www.barandbench.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-primary hover:underline"
+        >
+          Bar & Bench
+        </a>
+        <span className="mx-1">•</span>
+        <a
+          href="https://indiankanoon.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-primary hover:underline"
+        >
+          Indian Kanoon
+        </a>
+      </div>
     </div>
   );
 };
