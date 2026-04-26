@@ -222,9 +222,9 @@ function Testimonials() {
           }`}
         >
           {[
-            { value: '4.9', label: 'Average Rating' },
-            { value: '10,000+', label: 'Users Helped' },
-            { value: '50,000+', label: 'Questions Answered' },
+            { value: '4.9', label: 'Concept Rating' },
+            { value: 'Prototype', label: 'System Stage' },
+            { value: 'Academic', label: 'Use Case' },
             { value: '24/7', label: 'Availability' },
           ].map((stat, index) => (
             <div key={stat.label} className="text-center px-4">

@@ -1,25 +1,85 @@
 import { useState, useEffect, useRef } from 'react'
 import {
   Home, Briefcase, Users, ShoppingBag, Heart, Car,
-  Landmark, Shield, FileText, Scale, ArrowRight, Search
+  Landmark, Shield, FileText, Scale, ArrowRight, Search,
+  Leaf
 } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
 import { lawData } from "../localData/lawData";
 
 const iconMap = {
+  // Core law types
   "criminal-law": Shield,
   "civil-law": Landmark,
-  "labour-law": Briefcase,
+  "constitutional-law": Scale,
+  "administrative-law": FileText,
+  "international-law": Users,
+
+  // Special domains
+  "cyber-law": FileText,
+  "environmental-law": Leaf,
   "consumer-law": ShoppingBag,
-  "business-law": Scale,
+
+  // Acts
+  "factories-act": Briefcase,
+  "minimum-wages-act": Briefcase,
+  "industrial-disputes-act": Briefcase,
+
+  "environment-protection-act": Leaf,
+  "wildlife-protection-act": Leaf,
+
+  "patents-act": FileText,
+  "copyright-act": FileText,
+  "trademark-act": FileText,
+
+  "information-technology-act": FileText,
+
+  "code-of-criminal-procedure": Shield,
+  "code-of-civil-procedure": Landmark,
+
+  "right-to-information-act": FileText,
+  "consumer-protection-act": ShoppingBag,
+  "prevention-of-corruption-act": Shield,
+
+  // fallback categories
+  "labour-law": Briefcase,
+  "other": Scale,
 };
 
 const colorMap = {
   "criminal-law": "from-red-500 to-rose-500",
   "civil-law": "from-purple-500 to-indigo-500",
-  "labour-law": "from-pink-500 to-purple-500",
+  "constitutional-law": "from-indigo-500 to-blue-500",
+  "administrative-law": "from-gray-500 to-slate-600",
+  "international-law": "from-blue-400 to-cyan-500",
+
+  "cyber-law": "from-cyan-500 to-blue-600",
+  "environmental-law": "from-green-500 to-emerald-600",
   "consumer-law": "from-orange-500 to-amber-500",
-  "business-law": "from-indigo-500 to-blue-500",
+
+  "labour-law": "from-pink-500 to-purple-500",
+
+  "factories-act": "from-yellow-500 to-orange-500",
+  "minimum-wages-act": "from-yellow-400 to-amber-500",
+  "industrial-disputes-act": "from-orange-500 to-red-500",
+
+  "environment-protection-act": "from-green-500 to-lime-500",
+  "wildlife-protection-act": "from-green-600 to-emerald-700",
+
+  "patents-act": "from-indigo-500 to-purple-500",
+  "copyright-act": "from-violet-500 to-purple-600",
+  "trademark-act": "from-purple-500 to-pink-500",
+
+  "information-technology-act": "from-blue-500 to-cyan-500",
+
+  "code-of-criminal-procedure": "from-red-600 to-rose-700",
+  "code-of-civil-procedure": "from-indigo-600 to-blue-700",
+
+  "right-to-information-act": "from-teal-500 to-cyan-500",
+  "consumer-protection-act": "from-orange-500 to-red-500",
+  "prevention-of-corruption-act": "from-red-700 to-rose-800",
+
+  "other": "from-gray-400 to-gray-600",
 };
 
 function Categories() {
@@ -241,18 +301,18 @@ function Categories() {
         </div>
 
         {/* View all link */}
-        < div
+        {/* < div
           className={`text-center mt-10 transition-all duration-700 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
-        >
-          <a
+        > */}
+          {/* <a
             href="#"
             className="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all duration-300 group"
           >
             View all categories
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-          </a>
-        </div>
+          </a> */}
+        {/* </div> */}
 
 
       </div>

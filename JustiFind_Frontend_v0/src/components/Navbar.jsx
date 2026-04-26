@@ -115,12 +115,22 @@ function Navbar({ darkMode, setDarkMode }) {
             </button>
 
             {/* CTA Button */}
-            <a
-              href="#"
-              className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-cyan-500 text-primary-foreground font-medium text-sm rounded-xl shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/40 hover:scale-105 transition-all duration-300"
+            <button
+              onClick={() => {
+                const input = document.getElementById("searchInput");
+
+                if (input) {
+                  input.scrollIntoView({ behavior: "smooth", block: "center" });
+
+                  setTimeout(() => {
+                    input.focus();
+                  }, 500);
+                }
+              }}
+              className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-cyan-500 text-primary-foreground font-medium text-sm rounded-xl shadow-lg hover:scale-105 transition-all duration-300"
             >
               Get Started
-            </a>
+            </button>
 
             {/* Mobile menu button */}
             <button
@@ -164,8 +174,22 @@ function Navbar({ darkMode, setDarkMode }) {
               )
             ))}
             <a
-              href="#"
-              className="block px-4 py-3 mt-2 bg-gradient-to-r from-primary to-cyan-500 text-primary-foreground font-medium text-center rounded-xl"
+              href="#searchInput"
+              onClick={(e) => {
+                e.preventDefault();
+
+                const input = document.getElementById("searchInput");
+
+                if (input) {
+                  input.scrollIntoView({ behavior: "smooth", block: "center" });
+
+                  // wait for scroll, then focus
+                  setTimeout(() => {
+                    input.focus();
+                  }, 500);
+                }
+              }}
+              className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-cyan-500 text-primary-foreground font-medium text-sm rounded-xl shadow-lg hover:scale-105 transition-all duration-300"
             >
               Get Started
             </a>
