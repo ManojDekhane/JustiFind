@@ -41,6 +41,7 @@ const MythFactHome = () => {
           <MythFactCard key={item.id} item={item} />
         ))}
       </div>
+      
     </div>
   );
 };

@@ -57,6 +57,36 @@ const MythFactDetail = () => {
           {data.description}
         </p>
       </div>
+      {/* FOOTER SOURCE TEXT */}
+<div className="fixed bottom-4 right-4 text-xs text-gray-500 bg-white/80 backdrop-blur-sm px-3 py-2 rounded-lg shadow-sm border">
+  <span className="font-medium text-gray-600">Sources:</span>
+  <a
+    href="https://www.livelaw.in"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="ml-2 hover:text-primary hover:underline"
+  >
+    Live Law
+  </a>
+  <span className="mx-1">•</span>
+  <a
+    href="https://www.barandbench.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:text-primary hover:underline"
+  >
+    Bar & Bench
+  </a>
+  <span className="mx-1">•</span>
+  <a
+    href="https://indiankanoon.org"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hover:text-primary hover:underline"
+  >
+    Indian Kanoon
+  </a>
+</div>
     </div>
   );
 };
