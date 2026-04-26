@@ -30,11 +30,11 @@ function Features() {
     {
       icon: Bot,
       title: 'AI Legal Assistant',
-      description: 'Get instant answers to your legal questions powered by advanced AI. Available 24/7 to help you understand complex legal matters.',
+      description: 'Chat with our AI Legal Assistant to get instant answers to legal questions, understand laws, and get guided help 24/7.',
       color: 'from-blue-500 to-cyan-500',
       shadow: 'shadow-blue-500/25',
-      stats: '50K+ queries answered',
-      link: '#',
+      stats: 'Live AI Chatbot',
+      link: '/assistant', 
     },
     {
       icon: BookOpen,
@@ -130,9 +130,7 @@ function Features() {
               key={feature.title}
               onClick={() => {
                 // feature.link !== "#" && navigate(feature.link)
-                if (feature.title === "AI Legal Assistant") {
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                } else if (feature.link !== "#") {
+                if (feature.link !== "#") {
                   navigate(feature.link);
                 }
               }}
