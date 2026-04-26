@@ -83,19 +83,19 @@ export const mythFactTopicData = [
    {
     id: 14,
     name: "Civil cases are about money",
-    image: "https://www.lawdistrict.com/images/articles/civil-law.jpg",
-    link: "/info/civil-cases-about-money",
+    image: "https://advocateasad.com/wp-content/uploads/2025/09/download-2-e1756899026454.webp",
+    link: "/info/civil-cases-are-about-money",
   },
   {
     id: 15,
     name: "Winning ends dispute",
-    image: "https://cdn.elearningindustry.com/wp-content/uploads/2020/07/mediation-vs-litigation-differences.jpg",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDeLfcYZswjyq6V3sbjfMyhKD_O1jDVz0vSA&s",
     link: "/info/winning-ends-dispute",
   },
   {
     id: 16,
     name: "Cases give quick results",
-    image: "https://legaldesire.com/wp-content/uploads/2023/05/court-proceedings.jpg",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0dWrJsXj2dQcPFKRJWatsxAAEhfbnQZraag&s",
     link: "/info/cases-give-quick-results",
   },
   {
