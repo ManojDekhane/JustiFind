@@ -21,6 +21,8 @@ function Hero() {
   const recognitionRef = useRef(null);
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+  const inputRef = useRef(null);
+
   const placeholderText = "Ask your legal question..."
 
   if (SpeechRecognition && !recognitionRef.current) {
@@ -222,6 +224,7 @@ function Hero() {
               </div>
 
               <input
+                id='searchInput'
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

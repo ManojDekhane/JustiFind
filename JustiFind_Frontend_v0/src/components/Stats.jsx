@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Users, MessageSquare, BookOpen, Clock, TrendingUp } from 'lucide-react'
+import { lawData } from "../localData/lawData";
 
 function Stats() {
   const [isVisible, setIsVisible] = useState(false)
@@ -31,7 +32,7 @@ function Stats() {
     const steps = 60
     const stepDuration = duration / steps
 
-    const targets = { users: 10000, queries: 50000, articles: 500, hours: 24 }
+    const targets = { users: 30, queries: 120, articles: lawData.length, hours: 24 }
     let step = 0
 
     const interval = setInterval(() => {
@@ -60,7 +61,7 @@ function Stats() {
       label: 'Active Users',
       description: 'People trusting JustiFind',
       color: 'from-blue-500 to-cyan-500',
-      growth: '+12%'
+      growth: 'Active'
     },
     { 
       icon: MessageSquare, 
@@ -68,7 +69,7 @@ function Stats() {
       label: 'Queries Answered',
       description: 'Legal questions resolved',
       color: 'from-purple-500 to-pink-500',
-      growth: '+28%'
+      growth: 'Live'
     },
     { 
       icon: BookOpen, 
@@ -76,7 +77,7 @@ function Stats() {
       label: 'Legal Articles',
       description: 'Comprehensive guides',
       color: 'from-emerald-500 to-teal-500',
-      growth: '+15%'
+      growth: 'Updated'
     },
     { 
       icon: Clock, 
@@ -84,7 +85,7 @@ function Stats() {
       label: 'Availability',
       description: 'Always here for you',
       color: 'from-amber-500 to-orange-500',
-      growth: '100%'
+      growth: '24/7'
     },
   ]
 
