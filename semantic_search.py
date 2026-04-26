@@ -496,6 +496,40 @@ def generate_explanation(text, query):
     except:
         return "Explanation unavailable."
 
+
+def explain_law_simple(title, description):
+    prompt = f"""
+Explain this law in very simple terms for a common person.
+
+Law Title: {title}
+Description: {description}
+
+Make the answer:
+- Easy to understand
+- Use bullet points
+- Give a real-life example if possible
+"""
+
+    try:
+        res = requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {GROQ_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.3
+            },
+            timeout=30
+        )
+
+        return res.json()["choices"][0]["message"]["content"]
+
+    except:
+        return "Explanation unavailable."
+    
 # ==========================================================
 # SEARCH API
 # ==========================================================
@@ -583,6 +617,24 @@ def get_lawyers():
         l["distance"] = geodesic(user_loc, (l["lat"], l["lon"])).km
 
     return jsonify(sorted(lawyers, key=lambda x: x["distance"]))
+
+
+@app.route("/explain-law", methods=["POST"])
+def explain_law():
+
+    data = request.json
+    title = data.get("title", "")
+    description = data.get("description", "")
+
+    if not description:
+        return jsonify({"error": "No law data provided"}), 400
+
+    explanation = explain_law_simple(title, description)
+
+    return jsonify({
+        "explanation": explanation
+    })
+
 
 # ==========================================================
 # RUN
