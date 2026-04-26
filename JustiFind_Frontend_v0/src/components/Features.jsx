@@ -43,7 +43,7 @@ function Features() {
       color: 'from-emerald-500 to-teal-500',
       shadow: 'shadow-emerald-500/25',
       stats: '200+ guides available',
-      link: '#',
+      link: '/rights',
     },
     {
       icon: Newspaper,
@@ -52,7 +52,7 @@ function Features() {
       color: 'from-purple-500 to-pink-500',
       shadow: 'shadow-purple-500/25',
       stats: 'Daily updates',
-      link: '#',
+      link: '/news',
     },
     {
       icon: HelpCircle,
