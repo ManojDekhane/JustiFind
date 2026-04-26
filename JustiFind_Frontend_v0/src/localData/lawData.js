@@ -408,14 +408,6 @@ export const lawData = [
     "section": "IPC Section 345"
   },
   {
-    "id": 52,
-    "title": "Title",
-    "category": "lawtype",
-    "categoryName": "LawType",
-    "description": "Description",
-    "section": "IPC Section Section"
-  },
-  {
     "id": 53,
     "title": "Wrongful Confinement in Secret",
     "category": "criminal-law",
