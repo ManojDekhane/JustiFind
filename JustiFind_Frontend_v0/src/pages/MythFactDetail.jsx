@@ -52,7 +52,7 @@ const MythFactDetail = () => {
 
       {/* EXPLANATION */}
       <div className="mt-10 bg-white p-6 rounded-2xl shadow">
-        <h3 className="text-xl font-semibold mb-3">Explanation</h3>
+        <h3 className="text-xl font-semibold mb-3 text-primary">Explanation</h3>
         <p className="text-gray-700 leading-relaxed">
           {data.description}
         </p>

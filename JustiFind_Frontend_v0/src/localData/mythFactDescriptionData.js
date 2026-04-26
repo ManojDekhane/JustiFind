@@ -130,7 +130,7 @@ const mythFactDescriptionData = new Map([
     },
   ],
   [
-  "civil-cases-about-money",
+  "civil-cases-are-about-money",
   {
     title: "Civil Cases Are About Money",
     myth: "Civil cases are only about financial disputes or compensation.",
