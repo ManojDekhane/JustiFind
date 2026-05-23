@@ -58,7 +58,7 @@ function App() {
           <div className="absolute top-1/2 right-1/3 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '4s' }} />
         </div>
 
-        <div className="relative z-10">
+        <div className={`relative z-10 pt-20`}>
           <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
           {/* ✅ ROUTES START HERE */}

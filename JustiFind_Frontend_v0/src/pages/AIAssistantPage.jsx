@@ -77,7 +77,7 @@ function AIAssistantPage() {
               )}
 
               {/* Message */}
-              <div
+              {/* <div
                 className={`p-4 rounded-2xl max-w-[75%] shadow-sm ${
                   msg.role === "user"
                     ? "bg-primary text-white"
@@ -85,7 +85,44 @@ function AIAssistantPage() {
                 }`}
               >
                 <ReactMarkdown>{msg.content}</ReactMarkdown>
-              </div>
+              </div> */}
+              <div
+  className={`p-4 rounded-2xl max-w-[75%] shadow-md border transition-all leading-relaxed ${
+    msg.role === "user"
+      ? "bg-primary text-white ml-auto"
+      : "bg-background text-foreground border-border/50"
+  }`}
+>
+  <div className="prose prose-sm max-w-none prose-invert">
+    <ReactMarkdown
+      components={{
+        p: ({ children }) => (
+          <p className="mb-2 last:mb-0 text-sm leading-relaxed">
+            {children}
+          </p>
+        ),
+        strong: ({ children }) => (
+          <strong className="font-semibold text-primary">
+            {children}
+          </strong>
+        ),
+        ul: ({ children }) => (
+          <ul className="list-disc ml-4 space-y-1">{children}</ul>
+        ),
+        li: ({ children }) => (
+          <li className="text-sm opacity-90">{children}</li>
+        ),
+        code: ({ children }) => (
+          <code className="bg-black/10 px-1 py-0.5 rounded text-xs">
+            {children}
+          </code>
+        ),
+      }}
+    >
+      {msg.content}
+    </ReactMarkdown>
+  </div>
+</div>
 
               {msg.role === "user" && (
                 <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-sm">

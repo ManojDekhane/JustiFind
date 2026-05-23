@@ -18,21 +18,19 @@ function Navbar({ darkMode, setDarkMode }) {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const navLinks = [
-    { name: 'Home', href: '#' },
-    {
-      name: 'Resources',
-      href: '#',
-      dropdown: [
-        { name: 'Laws by Category', href: '#categories' },
-        { name: 'NGOs & Legal Aid', href: '#' },
-        { name: 'Know Your Rights', href: '#' },
-      ]
-    },
-    { name: 'News', to: '/news' },
-    { name: 'Myths vs Facts', to: '/myths' },
-    { name: 'AI Assistant', to: '/assistant' },
-  ]
+const navLinks = [
+  { name: "Home", to: "/" },
+  {
+    name: "Resources",
+    dropdown: [
+      { name: "Laws by Category", to: "/#categories" },
+      { name: "Know Your Rights", to: "/rights" },
+    ],
+  },
+  { name: "News", to: "/news" },
+  { name: "Myths vs Facts", to: "/myths" },
+  { name: "AI Assistant", to: "/assistant" },
+];
 
   return (
     <nav
@@ -92,7 +90,7 @@ function Navbar({ darkMode, setDarkMode }) {
                       {link.dropdown.map((item) => (
                         <a
                           key={item.name}
-                          href={item.href}
+                          href={item.to}
                           className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-lg transition-all duration-200"
                         >
                           {item.name}
@@ -173,7 +171,7 @@ function Navbar({ darkMode, setDarkMode }) {
               ) : (
                 <a
                   key={link.name}
-                  href={link.href}
+                  href={link.to}
                   className="block px-4 py-3 text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl transition-all duration-200"
                   style={{ animationDelay: `${index * 50}ms` }}
                   onClick={() => setIsMobileMenuOpen(false)}
