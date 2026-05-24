@@ -43,7 +43,7 @@ function Features() {
       color: 'from-emerald-500 to-teal-500',
       shadow: 'shadow-emerald-500/25',
       stats: '200+ guides available',
-      link: '#',
+      link: '/rights',
     },
     {
       icon: Newspaper,

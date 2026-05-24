@@ -303,7 +303,7 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 # LOAD DATA
 # ==========================================================
 df = pd.read_csv(
-    "/home/manoj/Downloads/CrimesAgainstPersonsLawsDataset.csv",
+    "C:\\Users\\Shivani Katkar\\Downloads\\CrimesAgainstPersonsLawsDataset (1).csv",
     sep=",",
     engine="python",
     quotechar='"',
