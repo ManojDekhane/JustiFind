@@ -65,20 +65,32 @@ function Hero() {
 
       const data = response.data;
 
-      setResults([
-        {
-          section: data.law?.section || "N/A",
-          title: data.law?.title || "No title",
-          description: data.law?.description || "",
-          ai_response: data.ai_response || "No explanation available",
-        },
-      ]);
+      // setResults([
+      //   {
+      //     section: data.law?.section || "N/A",
+      //     title: data.law?.title || "No title",
+      //     description: data.law?.description || "",
+      //     ai_response: data.ai_response || "No explanation available",
+      //   },
+      // ]);
 
       // setLawCategory(data.law.category);
 
-      setLawCategory(
-        data.classification?.Domain || data.classification?.LawType || ""
-      );
+      // setLawCategory(
+      //   data.classification?.Domain || data.classification?.LawType || ""
+      // );
+
+
+      setResults([
+        {
+          section: data.laws?.[0]?.section || "N/A",
+          title: data.laws?.[0]?.title || "No title",
+          description: data.laws?.[0]?.description || "",
+          ai_response: data.laws?.[0]?.explanation || "No explanation available",
+        },
+      ]);
+
+      setLawCategory("");
     } catch (error) {
       console.error(error);
       setResults([

@@ -3,12 +3,12 @@ from flask_cors import CORS
 import pandas as pd
 import numpy as np
 from sentence_transformers import SentenceTransformer, util, CrossEncoder
-from sklearn.feature_extraction.text import TfidfVectorizer
+from rank_bm25 import BM25Okapi
 import requests
 import os
+import json
 from geopy.distance import geodesic
 from dotenv import load_dotenv
-import json
 
 load_dotenv()
 
@@ -17,212 +17,419 @@ CORS(app)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# ==========================================================
-# LOAD DATA
-# ==========================================================
-df = pd.read_csv(
-    "/home/manoj/Downloads/CrimesAgainstPersonsLawsDataset.csv",
-    engine="python",
-    on_bad_lines="warn"
-)
+# ======================== LOAD DATA ========================
+CSV_PATH = "/home/manoj/Downloads/CrimesAgainstPersonsLawsDataset.csv"   # update if needed
 
+df = pd.read_csv(CSV_PATH, on_bad_lines='skip')
 df.fillna("", inplace=True)
 
 df["text_for_embedding"] = (
-    df["LawType"] + ". " +
-    df["Domain"] + ". " +
-    df["Intent"] + ". " +
-    df["Title"] + ". " +
-    df["Description"] + ". " +
-    df["Example Queries"] + ". " +
-    df["Keywords"]
+    "LawType: " + df["LawType"] + ". " +
+    "Domain: " + df["Domain"] + ". " +
+    "Intent: " + df["Intent"] + ". " +
+    "Title: " + df["Title"] + ". " +
+    "Description: " + df["Description"] + ". " +
+    "Examples: " + df["Example Queries"] + ". " +
+    "Keywords: " + df["Keywords"]
 )
 
-# ==========================================================
-# MODELS
-# ==========================================================
-embed_model = SentenceTransformer("all-mpnet-base-v2")
+print("Rows loaded:", len(df))
+
+# ======================== MODELS ========================
+
+embed_model = SentenceTransformer("law-ai/InLegalBERT")
 reranker = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
 
-law_embeddings = util.normalize_embeddings(
-    embed_model.encode(df["text_for_embedding"].tolist(), convert_to_tensor=True)
+law_embeddings = embed_model.encode(
+    df["text_for_embedding"].tolist(),
+    convert_to_tensor=True
 )
+law_embeddings = util.normalize_embeddings(law_embeddings)
 
-tfidf = TfidfVectorizer(stop_words="english")
-tfidf_matrix = tfidf.fit_transform(df["text_for_embedding"])
+tokenized_corpus = [
+    x.lower().split()
+    for x in df["text_for_embedding"]
+]
 
-# ==========================================================
-# 🔥 1. LEGAL ROUTER (NEW)
-# ==========================================================
-def route_query(query):
+bm25 = BM25Okapi(tokenized_corpus)
+
+# ======================== HELPERS ========================
+
+def normalize(scores):
+    scores=np.array(scores)
+
+    if scores.max()==scores.min():
+        return scores
+
+    return (scores-scores.min())/(scores.max()-scores.min())
+
+def classify_query(query):
 
     prompt = f"""
-Classify legal domain:
+Return ONLY valid JSON. No explanation. No markdown.
 
-Choose ONE:
-IPC, CIVIL, LABOUR, CONSTITUTION, IT_ACT, OTHER
+Format:
+{{"LawType":"...","Domain":"...","Intent":"..."}}
 
-Query:
-{query}
-
-Return JSON:
-{{"route": "..."}}
+Query: {query}
 """
 
     try:
-        res = requests.post(
+        r=requests.post(
             "https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {GROQ_API_KEY}"},
+            headers={
+                "Authorization":f"Bearer {GROQ_API_KEY}",
+                "Content-Type":"application/json"
+            },
             json={
-                "model": "meta-llama/llama-4-scout-17b-16e-instruct",
-                "messages": [{"role": "user", "content": prompt}],
-                "temperature": 0
+                "model":"meta-llama/llama-4-scout-17b-16e-instruct",
+                "messages":[{"role":"user","content":prompt}],
+                "temperature":0
             }
         )
 
-        content = res.json()["choices"][0]["message"]["content"]
-        return json.loads(content).get("route", "OTHER")
+        content = r.json()["choices"][0]["message"]["content"]
+
+# remove markdown fences if present
+        content = content.replace("```json", "").replace("```", "").strip()
+
+        data = json.loads(content)
+
+        print("CLASSIFY RAW:", r.json()["choices"][0]["message"]["content"])
+
+        return (
+            data.get("LawType","Other"),
+            data.get("Domain","General"),
+            data.get("Intent","Other")
+        )
 
     except:
-        return "OTHER"
+        return ("Other","General","Other")
 
-# ==========================================================
-# 🔥 2. INTENT CLASSIFIER (NEW)
-# ==========================================================
-def intent_classifier(query):
 
-    prompt = f"""
-Classify intent:
+def expand_query(query):
 
-Options:
-COMPLAINT, INFORMATION, RIGHTS, PROCEDURE, PUNISHMENT
+    prompt=f"""
+Expand legal query into related keywords only.
 
-Query:
-{query}
-
-Return JSON:
-{{"intent": "..."}}
+Query:{query}
 """
 
     try:
-        res = requests.post(
+        r=requests.post(
             "https://api.groq.com/openai/v1/chat/completions",
-            headers={"Authorization": f"Bearer {GROQ_API_KEY}"},
+            headers={
+                "Authorization":f"Bearer {GROQ_API_KEY}",
+                "Content-Type":"application/json"
+            },
             json={
-                "model": "meta-llama/llama-4-scout-17b-16e-instruct",
-                "messages": [{"role": "user", "content": prompt}],
-                "temperature": 0
+                "model":"meta-llama/llama-4-scout-17b-16e-instruct",
+                "messages":[{"role":"user","content":prompt}],
+                "temperature":0.2
             }
         )
 
-        content = res.json()["choices"][0]["message"]["content"]
-        return json.loads(content).get("intent", "INFORMATION")
+        # expanded=r.json()["choices"][0]["message"]["content"]
+        expanded = query
+        return query+" "+expanded
 
     except:
-        return "INFORMATION"
+        return query
 
-# ==========================================================
-# HYBRID SEARCH (IMPROVED)
-# ==========================================================
-def hybrid_search(query, filtered_df, intent):
 
-    idx = filtered_df.index.tolist()
+def hybrid_search(query, lawtype, domain, top_k=20):
 
-    q_emb = util.normalize_embeddings(
-        embed_model.encode([query], convert_to_tensor=True)
+    query="Represent this legal search query: "+query
+
+    query_emb=embed_model.encode(
+        [query],
+        convert_to_tensor=True
     )
 
-    sem = util.cos_sim(q_emb, law_embeddings[idx])[0].cpu().numpy()
+    query_emb=util.normalize_embeddings(query_emb)
 
-    tfidf_q = tfidf.transform([query])
-    kw = (tfidf_q @ tfidf_matrix[idx].T).toarray()[0]
+    sem_scores=util.cos_sim(
+        query_emb,
+        law_embeddings
+    )[0].cpu().numpy()
 
-    # 🔥 intent boost
-    intent_boost = np.array([
-        0.1 if intent.lower() in str(df.iloc[i]["Intent"]).lower() else 0
-        for i in idx
-    ])
+    keyword_scores=np.array(
+        bm25.get_scores(
+            query.lower().split()
+        )
+    )
 
-    scores = 0.6 * sem + 0.3 * kw + 0.1 * intent_boost
+    sem_scores=normalize(sem_scores)
+    keyword_scores=normalize(keyword_scores)
 
-    top = np.argsort(scores)[-5:][::-1]
+    bonus=[]
 
-    results = []
-    for i in top:
-        row = filtered_df.iloc[i]
+    for _,row in df.iterrows():
+
+        b=0
+
+        if lawtype.lower() in row["LawType"].lower():
+            b+=0.15
+
+        if domain.lower() in row["Domain"].lower():
+            b+=0.15
+
+        bonus.append(b)
+
+    bonus=np.array(bonus)
+
+    final_scores=(
+        0.6*sem_scores
+        +0.25*keyword_scores
+        +0.15*bonus
+    )
+
+    top_idx=np.argsort(final_scores)[-top_k:][::-1]
+
+    results=[]
+
+    for i in top_idx:
+
+        row=df.iloc[i]
+
         results.append({
-            "index": idx[i],
-            "section": row["Section"],
-            "title": row["Title"],
-            "description": row["Description"],
-            "score": float(scores[i])
+            "index":i,
+            "section":str(row["Section"]),
+            "title":row["Title"],
+            "description":row["Description"],
+            "score":float(final_scores[i])
         })
 
     return results
 
-# ==========================================================
-# RERANK
-# ==========================================================
-def rerank(query, candidates):
+# def generate_explanation(title, description, query):
+#     prompt = f"""
+# Explain this law in simple terms.
 
-    pairs = [(query, c["title"] + " " + c["description"]) for c in candidates]
-    scores = reranker.predict(pairs)
+# Law Title: {title}
+# Description: {description}
 
-    ranked = sorted(zip(candidates, scores), key=lambda x: x[1], reverse=True)
-    return ranked
+# User Query: {query}
 
-# ==========================================================
-# SEARCH API
-# ==========================================================
-@app.route("/search", methods=["POST"])
-def search():
+# Requirements:
+# - simple English
+# - bullet points
+# - real-life example
+# """
 
-    query = request.json.get("query", "").strip()
-    if not query:
-        return jsonify({"error": "empty query"}), 400
+#     try:
+#         r = requests.post(
+#             "https://api.groq.com/openai/v1/chat/completions",
+#             headers={
+#                 "Authorization": f"Bearer {GROQ_API_KEY}",
+#                 "Content-Type": "application/json"
+#             },
+#             json={
+#                 "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+#                 "messages": [{"role": "user", "content": prompt}],
+#                 "temperature": 0.3
+#             },
+#             timeout=30
+#         )
 
-    # 🔥 STEP 1: ROUTE
-    route = route_query(query)
+#         return r.json()["choices"][0]["message"]["content"]
 
-    # 🔥 STEP 2: INTENT
-    intent = intent_classifier(query)
+#     except:
+#         return "Explanation unavailable."
 
-    # 🔥 STEP 3: FILTER (STRONGER)
-    filtered_df = df[df["LawType"].str.contains(route, case=False, na=False)]
 
-    if len(filtered_df) < 5:
-        filtered_df = df
+def generate_explanation(title, description, query):
 
-    # 🔥 STEP 4: SEARCH
-    candidates = hybrid_search(query, filtered_df, intent)
+    prompt = f"""
+Explain this law in simple terms.
 
-    # 🔥 STEP 5: RERANK
-    ranked = rerank(query, candidates)
+Law Title: {title}
+Description: {description}
 
-    best, score = ranked[0]
+User Query: {query}
 
-    # 🔥 SECTION BOOST FIX
-    if query.lower() in str(best["section"]).lower():
-        score += 0.2
+Requirements:
+- simple English
+- bullet points
+- real-life example
+"""
 
-    # 🔥 EXPLANATION
-    row = df.iloc[best["index"]]
-    text = f"{row['Section']} - {row['Title']}. {row['Description']}"
+    try:
 
-    explanation = "Explain: " + text
+        r = requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {GROQ_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                "temperature": 0.3
+            },
+            timeout=30
+        )
+
+
+        print("GROQ STATUS:", r.status_code)
+        print("GROQ RESPONSE:", r.text)
+
+
+        data = r.json()
+
+        return data["choices"][0]["message"]["content"]
+
+
+    except Exception as e:
+
+        print("EXPLANATION ERROR:", e)
+
+        return "Explanation unavailable."
+
+
+@app.route("/explain-law", methods=["POST"])
+def explain_law():
+
+    data = request.json
+
+    title = data.get("title", "")
+    description = data.get("description", "")
+
+    if not description:
+        return jsonify({
+            "error": "No law data provided"
+        }), 400
+
+
+    explanation = generate_explanation(
+        title,
+        description,
+        "Explain this law"
+    )
+
 
     return jsonify({
-        "law": best,
-        "confidence": float(score),
-        "classification": {
-            "route": route,
-            "intent": intent
-        },
-        "ai_response": explanation
+        "explanation": explanation
     })
 
-# ==========================================================
-# RUN
-# ==========================================================
-if __name__ == "__main__":
+
+
+def rerank(query,candidates):
+
+    pairs=[
+        (
+            query,
+            x["title"]+" "+x["description"]
+        )
+        for x in candidates
+    ]
+
+    scores=reranker.predict(pairs)
+
+    ranked=sorted(
+        zip(candidates,scores),
+        key=lambda x:x[1],
+        reverse=True
+    )
+
+    return ranked
+
+
+# ======================== ROUTES ========================
+
+@app.route("/search",methods=["POST"])
+def search():
+
+    data=request.json
+    query=data.get("query","")
+
+    if not query:
+        return jsonify({"error":"Empty query"}),400
+
+    lawtype,domain,intent=classify_query(query)
+
+    expanded=expand_query(query)
+
+    candidates=hybrid_search(
+        expanded,
+        lawtype,
+        domain,
+        top_k=20
+    )
+
+    print("Candidates:", len(candidates))
+
+    for c in candidates[:5]:
+        print("CANDIDATE SAMPLE:", c)
+
+        ranked=rerank(
+            query,
+            candidates
+        )
+
+    print("Ranked size:", len(ranked))
+
+    top_laws = []
+
+    for law, score in ranked[:3]:
+
+        explanation = generate_explanation(
+            law["title"],
+            law["description"],
+            query
+        )
+
+        top_laws.append({
+            "section": law["section"],
+            "title": law["title"],
+            "description": law["description"],
+            "score": float(score),
+            "explanation": explanation
+        })
+
+    return jsonify({
+        "laws": top_laws,
+        "classification": {
+            "LawType": lawtype,
+            "Domain": domain,
+            "Intent": intent
+        }
+    })
+
+    
+
+
+lawyers=[
+    {"name":"Amit Sharma","lat":18.5204,"lon":73.8567},
+    {"name":"Priya Desai","lat":19.0760,"lon":72.8777}
+]
+
+@app.route("/lawyers")
+def get_lawyers():
+
+    lat=float(request.args.get("lat"))
+    lon=float(request.args.get("lon"))
+
+    user=(lat,lon)
+
+    for l in lawyers:
+        l["distance"]=geodesic(
+            user,
+            (l["lat"],l["lon"])
+        ).km
+
+    return jsonify(
+        sorted(
+            lawyers,
+            key=lambda x:x["distance"]
+        )
+    )
+
+
+if __name__=="__main__":
     app.run(debug=True)
