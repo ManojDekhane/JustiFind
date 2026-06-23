@@ -30,6 +30,10 @@ public class LawyersServices {
                 continue; // skip
             }
 
+            System.out.println("LAWYER NAME: " + l.getName());
+            System.out.println("LAT: " + l.getLatitude());
+            System.out.println("LON: " + l.getLongitude());
+
             double dist = calculateDistance(latitude, longitude, l.getLatitude(), l.getLongitude());
 
             LawyersDTO res = new LawyersDTO();

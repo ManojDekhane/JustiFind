@@ -8,8 +8,8 @@ public class Lawyers {
     private String email;
     private String name;
     private String Category;
-    private double longitude;
-    private double latitude;
+    private Double longitude;
+    private Double latitude;
     private String City;
     private long contact;
     private String password;
@@ -63,11 +63,11 @@ public class Lawyers {
         return name;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 

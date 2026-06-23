@@ -90,7 +90,15 @@ function Hero() {
         },
       ]);
 
-      setLawCategory("");
+      setLawCategory("General");
+
+      // setLawCategory(data.laws.category);
+
+      // setLawCategory(
+      //   data.classification?.Domain || data.classification?.LawType || ""
+      // );
+
+
     } catch (error) {
       console.error(error);
       setResults([
