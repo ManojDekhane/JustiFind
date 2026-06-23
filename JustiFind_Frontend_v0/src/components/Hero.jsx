@@ -98,7 +98,6 @@ function Hero() {
       //   data.classification?.Domain || data.classification?.LawType || ""
       // );
 
-
     } catch (error) {
       console.error(error);
       setResults([

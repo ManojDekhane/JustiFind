@@ -27,6 +27,7 @@ function AIAssistantPage() {
 
     try {
       const res = await axios.post("http://localhost:8080/ai/chat", {
+
         query: input
       });
 

@@ -3,6 +3,7 @@ import { lawData } from "../localData/lawData";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
+
 import ReactMarkdown from "react-markdown";
 
 const LawDetail = () => {
