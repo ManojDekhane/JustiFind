@@ -13,7 +13,7 @@ public class MongoConfig {
     public MongoClient mongoClient() {
         System.out.println("🔥 USING ATLAS CONFIG 🔥");
         return MongoClients.create(
-                "mongodb+srv://shivanikatkar04:JustiFindDatabase@justifind.buirb8w.mongodb.net/JustiFind?retryWrites=true&w=majority"
+                "mongodb+srv://shivanikatkar04:JustiFindDatabase@justifind.buirb8w.mongodb.net/lawDB?retryWrites=true&w=majority"
         );
     }
     @Bean

@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 
+import ReactMarkdown from "react-markdown";
+
 const LawDetail = () => {
 
   const [aiExplanation, setAiExplanation] = useState("");
@@ -87,9 +89,11 @@ const LawDetail = () => {
       {aiExplanation && (
         <div className="mt-6 bg-white p-6 rounded-xl shadow">
           <h3 className="font-semibold mb-2">AI Explanation</h3>
-          <p className="text-gray-700 whitespace-pre-line">
-            {aiExplanation}
-          </p>
+          <div className="prose prose-lg max-w-none text-gray-700">
+            <ReactMarkdown>
+              {aiExplanation}
+            </ReactMarkdown>
+          </div>
         </div>
       )}
 

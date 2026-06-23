@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/ai")
+@RequestMapping("/ai")
 @CrossOrigin(origins = "*")
 public class AiController {
 
